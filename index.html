@@ -27,12 +27,12 @@ html:has(#scar){overflow-x:hidden}
 #scar .up{text-transform:uppercase}
 
 /* ===== Đèn chuột: cả trang tối 40%, vùng quanh chuột sáng 100% ===== */
-#scar .spot{position:fixed;inset:0;z-index:2147483646;pointer-events:none;background:rgba(0,0,0,.07);
+#scar .spot{position:fixed;inset:0;z-index:2147483646;pointer-events:none;background:rgba(0,0,0,.07);contain:strict;
   -webkit-mask:radial-gradient(circle 190px at var(--mx,-500px) var(--my,-500px),transparent 0,transparent 55%,#000 100%);
           mask:radial-gradient(circle 190px at var(--mx,-500px) var(--my,-500px),transparent 0,transparent 55%,#000 100%)}
 #scar .ring{position:fixed;z-index:2147483647;left:0;top:0;width:17px;height:17px;margin:-8.5px 0 0 -8.5px;border-radius:50%;pointer-events:none;
   border:1.5px solid #fff1cf;box-shadow:0 0 10px 2px rgba(255,236,190,.6),inset 0 0 6px rgba(255,236,190,.5);
-  transform:translate(var(--mx,-100px),var(--my,-100px));transition:width .2s,height .2s,margin .2s}
+  transform:translate(-100px,-100px);will-change:transform;transition:width .2s,height .2s,margin .2s}
 #scar .ring.big{width:29px;height:29px;margin:-14.5px 0 0 -14.5px}
 @media (pointer:fine){#scar,#scar *{cursor:none!important}}
 @media (pointer:coarse){#scar .spot,#scar .ring{display:none}}
@@ -146,7 +146,7 @@ html:has(#scar){overflow-x:hidden}
   #scar .introimg .ibg{position:absolute;left:50%;top:0;height:68%;aspect-ratio:1921/1081;transform:translateX(-50%);background:url(assets/ui/intro2_bg.webp) center/100% 100% no-repeat;z-index:-2}
   #scar .introimg .imid{position:absolute;left:0;right:0;top:28%;bottom:0;overflow:hidden;isolation:isolate;pointer-events:none;z-index:-1;
     -webkit-mask-image:linear-gradient(to top,#000 50%,transparent 95%);mask-image:linear-gradient(to top,#000 50%,transparent 95%)}
-  #scar .introimg .imid canvas{position:absolute;left:-15%;top:-5%;width:130%;height:110%;filter:blur(22px)}
+  #scar .introimg .imid video{position:absolute;left:-15%;top:-5%;width:130%;height:110%;object-fit:fill;filter:blur(14px);will-change:transform}
   #scar .introimg .imid i{position:absolute;inset:0;background:#030f11;mix-blend-mode:multiply;opacity:.5}
   #scar .introimg .ihd{text-align:center;color:#ceaa6c;margin-bottom:28px}
   #scar .introimg .ihd h1{margin:0;font-size:clamp(19px,5.3vw,30px);line-height:1.15;font-weight:700;letter-spacing:.03em}
@@ -162,7 +162,7 @@ html:has(#scar){overflow-x:hidden}
   #scar .introimg .ibg{position:absolute;left:0;top:calc(50*var(--f));width:100%;aspect-ratio:1921/1081;background:url(assets/ui/intro2_bg.webp) center/100% 100% no-repeat}
   #scar .introimg .imid{position:absolute;left:0;top:calc(229*var(--f));width:100%;height:calc(810*var(--f));overflow:hidden;isolation:isolate;pointer-events:none;
     -webkit-mask-image:linear-gradient(to top,#000 45%,transparent 92%);mask-image:linear-gradient(to top,#000 45%,transparent 92%)}
-  #scar .introimg .imid canvas{position:absolute;left:-5%;top:-5%;width:110%;height:110%;filter:blur(calc(26*var(--f)))}
+  #scar .introimg .imid video{position:absolute;left:-5%;top:-5%;width:110%;height:110%;object-fit:fill;filter:blur(calc(14*var(--f)));will-change:transform}
   #scar .introimg .imid i{position:absolute;inset:0;background:#030f11;mix-blend-mode:multiply;opacity:.5}
   /* cụm chữ luôn canh giữa vùng 180–348 (trên khung video): dòng dưới dài 1–2 dòng vẫn cân */
   #scar .introimg .ihd{position:absolute;left:0;right:0;top:calc(180*var(--f));height:calc(168*var(--f));display:flex;flex-direction:column;justify-content:center;text-align:center;color:#ceaa6c;pointer-events:none}
@@ -891,7 +891,7 @@ html:has(#scar){overflow-x:hidden}
   <main class="view" id="v-bst">
     <section class="intro">
       <div class="introimg">
-        <div class="ibg"></div><div class="imid"><canvas width="240" height="101"></canvas><i></i></div>
+        <div class="ibg"></div><div class="imid"><video class="ibv" muted loop playsinline preload="none" poster="assets/ui/intro2_poster.webp" aria-hidden="true"></video><i></i></div>
         <div class="ihd"><h1>EPIC MOMENTS, EPIC LIFE</h1><p>Chào mừng bạn đến với ECM SCAR.<br>Nơi mọi câu chuyện đều bắt đầu từ một vết sẹo.</p></div>
         <div class="ivid ps"><video muted loop playsinline preload="none" poster="assets/ui/intro2_poster.webp"></video><button class="iplay" type="button" aria-label="Phát video"><svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9z" fill="#050505"/></svg></button><div class="ictl"><span class="itime">0:00 / 0:00</span><div class="ibar" role="slider" aria-label="Tua video" tabindex="0"><div class="trk"><i></i><b></b></div></div><div class="vol" role="slider" aria-label="Âm lượng" aria-valuemin="0" aria-valuemax="100" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path class="spk" d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path class="w1" d="M15.5 9.2a4 4 0 0 1 0 5.6"/><path class="w2" d="M18.3 6.6a7.6 7.6 0 0 1 0 10.8"/><path class="mx" d="M16 9.5l5 5M21 9.5l-5 5"/></svg><div class="vtrk"><i></i><b></b></div></div><button class="isnd" type="button">BẬT TIẾNG</button><button class="ifs" type="button" aria-label="Xem toàn màn hình"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div></div>
       </div>
@@ -1107,7 +1107,10 @@ try{var r=new URLSearchParams(location.search).get('ref');if(r)localStorage.setI
 /* ======================= Đèn chuột ======================= */
 if(fine){
   var ring=$('.ring');
-  addEventListener('pointermove',function(e){root.style.setProperty('--mx',e.clientX+'px');root.style.setProperty('--my',e.clientY+'px')},{passive:true});
+  /* chỉ đặt toạ độ lên 2 lớp đèn/vòng, mỗi khung hình 1 lần (đặt lên #scar làm cả trang tính lại style mỗi lần rê chuột) */
+  var spot=$('.spot'),mX=-500,mY=-500,mQ=0;
+  addEventListener('pointermove',function(e){mX=e.clientX;mY=e.clientY;if(!mQ)mQ=requestAnimationFrame(function(){mQ=0;
+    spot.style.setProperty('--mx',mX+'px');spot.style.setProperty('--my',mY+'px');ring.style.transform='translate('+mX+'px,'+mY+'px)'})},{passive:true});
   root.addEventListener('pointerover',function(e){ring.classList.toggle('big',!!e.target.closest('button,a,.stretch,video'))});
 }
 
@@ -1149,7 +1152,7 @@ ivs.forEach(function(w){var v=$('video',w),bar=$('.ibar',w),fill=$('.ibar i',w),
   $('.ifs',w).addEventListener('click',function(){ivSound=true;v.muted=false;ivLbl(w);if(v.paused){w._up=false;ivStart()}
     if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return}
     if(w.requestFullscreen)w.requestFullscreen().catch(function(){});else if(w.webkitRequestFullscreen)w.webkitRequestFullscreen();else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen()});
-  function upd(){var d=v.duration||0,f=d?v.currentTime/d:0;fill.style.width=f*100+'%';bar.style.setProperty('--p',f*100+'%');tm.textContent=tfmt(v.currentTime)+' / '+tfmt(d)}
+  function upd(){var d=v.duration||0,f=d?v.currentTime/d:0;fill.style.width=f*100+'%';bar.style.setProperty('--p',f*100+'%');var tx=tfmt(v.currentTime)+' / '+tfmt(d);if(tm.textContent!==tx)tm.textContent=tx}
   ['timeupdate','loadedmetadata','seeked'].forEach(function(ev){v.addEventListener(ev,upd)});
   (function lp(){requestAnimationFrame(lp);if(!v.paused&&!dr)upd()})();
   function seek(e){var r=bar.getBoundingClientRect(),f=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));if(v.duration){v.currentTime=f*v.duration;upd()}}
@@ -1159,12 +1162,14 @@ ivs.forEach(function(w){var v=$('video',w),bar=$('.ibar',w),fill=$('.ibar i',w),
   bar.addEventListener('keydown',function(e){if(!v.duration)return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();v.currentTime=Math.max(0,Math.min(v.duration,v.currentTime+(e.key==='ArrowRight'?5:-5)));upd()}});
   new IntersectionObserver(function(es){es.forEach(function(e){if(cur!=='bst')return;if(e.isIntersecting)ivStart();else v.pause()})},{threshold:.3}).observe(w);
   ['play','pause','playing'].forEach(function(ev){v.addEventListener(ev,function(){w.classList.toggle('ps',v.paused)})})});
-/* lớp giữa: cùng video vẽ vào canvas nhỏ rồi làm mờ bằng CSS, luôn khớp từng khung hình */
-(function(){var c=$('.introimg .imid canvas');if(!c)return;var x=c.getContext('2d'),v=$('.introimg video'),im=new Image();
-  function dw(){if(v.readyState>=2)x.drawImage(v,0,0,c.width,c.height)}
-  im.onload=function(){if(v.readyState<2)x.drawImage(im,0,0,c.width,c.height)};im.src=v.poster;
-  ['loadeddata','seeked'].forEach(function(ev){v.addEventListener(ev,dw)});
-  (function lp(){requestAnimationFrame(lp);if(!v.paused&&cur==='bst')dw()})()})();
+/* lớp giữa: bản video nhỏ đã làm mờ sẵn (nhẹ hơn nhiều so với vẽ lại + làm mờ từng khung hình), chạy bám theo video chính */
+(function(){var b=$('.introimg .ibv');if(!b)return;var v=$('.introimg .ivid video');
+  function sync(){if(!v.getAttribute('src'))return;if(!b.getAttribute('src'))b.src=AS('video/intro2_blur.mp4?v=1');
+    if(v.paused||cur!=='bst'){if(!b.paused)b.pause();return}
+    if(b.readyState>0&&Math.abs(b.currentTime-v.currentTime)>.25)b.currentTime=v.currentTime;
+    if(b.paused){var p=b.play();p&&p.catch(function(){})}}
+  ['play','playing','pause','seeked'].forEach(function(ev){v.addEventListener(ev,sync)});
+  setInterval(function(){if(cur==='bst'&&!document.hidden)sync()},700)})();
 addEventListener('resize',function(){if(cur==='bst'&&ivs.some(function(w){return !$('video',w).paused&&!w.offsetParent}))ivStart()});
 
 /* ======================= Điều hướng 3 trang ======================= */
@@ -1435,7 +1440,7 @@ function spinScene(d,key,bounded){
   function axis(){var f=((a/N)%1+1)%1,u=bounded?a/(N-1)*2-1:f<.5?f*2:f*2-2;ball.setAttribute('cx',SX(u));ball.setAttribute('cy',SY(u))}
   (function loop(now){requestAnimationFrame(loop);var dt=Math.min(.05,(now-(last||now))/1000);last=now;if(!live())return;
     if(!drag){if(Math.abs(vel)>.3){a+=vel*dt;vel*=Math.exp(-dt*2.6)}else{vel=0;if(auto&&now>idle)a+=5*dt}}
-    clampA();draw();axis()})(0);
+    clampA();draw()})(0);
   function pw(){return cv.getBoundingClientRect().width||1}
   cv.addEventListener('pointerdown',function(e){drag={x:e.clientX,a0:a,lx:e.clientX,lt:performance.now(),v:0};moved=0;vel=0;cv.setPointerCapture&&cv.setPointerCapture(e.pointerId);cv.dataset.g='1'});
   cv.addEventListener('pointermove',function(e){if(!drag)return;var dx=e.clientX-drag.x;moved=Math.max(moved,Math.abs(dx));
@@ -1570,7 +1575,7 @@ $('#tvcFs').addEventListener('click',function(){tvSound=true;tvPlay();
 /* thanh tua: bấm hoặc kéo để tua, phím trái/phải tua 5 giây */
 var tsk=$('#tvcSeek'),tbar=$('#tvcBar'),ttm=$('#tvcTime'),tdrag=false;
 function tfmt(t){t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+':'+('0'+t%60).slice(-2)}
-function tvUpd(){var d=tv.duration||0,f=d?tv.currentTime/d:0;tbar.style.width=f*100+'%';tsk.style.setProperty('--p',f*100+'%');ttm.textContent=tfmt(tv.currentTime)+' / '+tfmt(d);tsk.setAttribute('aria-valuenow',Math.round(f*100))}
+function tvUpd(){var d=tv.duration||0,f=d?tv.currentTime/d:0;tbar.style.width=f*100+'%';tsk.style.setProperty('--p',f*100+'%');var tx=tfmt(tv.currentTime)+' / '+tfmt(d);if(ttm.textContent!==tx){ttm.textContent=tx;tsk.setAttribute('aria-valuenow',Math.round(f*100))}}
 ['timeupdate','loadedmetadata','seeked'].forEach(function(ev){tv.addEventListener(ev,tvUpd)});
 (function tvLoop(){requestAnimationFrame(tvLoop);if(!tv.paused&&!tdrag)tvUpd()})();
 function tvSeekTo(e){var r=tsk.getBoundingClientRect(),f=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));if(tv.duration){tv.currentTime=f*tv.duration;tvUpd()}else{tbar.style.width=f*100+'%';tsk.style.setProperty('--p',f*100+'%')}}
