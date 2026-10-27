@@ -858,9 +858,9 @@ html:has(#scar){overflow-x:hidden}
   #scar .title .rgmore::before{left:-22%;right:-22%;top:-18%;bottom:-24%;background:radial-gradient(closest-side,rgba(2,8,9,.92),rgba(2,8,9,.7) 55%,transparent)}
   #scar .scene video{width:205vw;top:43%;-webkit-mask:none;mask:none}
   /* găng, băng đa: căn sản phẩm vào giữa khoảng trống giữa nút trên cùng và cụm tên, mờ dần mép trên/dưới cho liền nền */
-  #scar .scene .spin{width:205vw;top:calc((100% - 140px)/2 - 51.9vw);transform:translateX(-50%);
+  #scar .scene .spin{--w:clamp(205vw,calc(2.165*(100vh - 260px)),260vw);width:var(--w);top:calc((100% - 140px)/2 - .2526*var(--w));transform:translateX(-50%);
     -webkit-mask:linear-gradient(transparent,#000 7%,#000 80%,transparent);mask:linear-gradient(transparent,#000 7%,#000 80%,transparent)}
-  #scar .scene.sp-bangda .spin{top:calc((100% - 140px)/2 - 60vw)}
+  #scar .scene.sp-bangda .spin{--w:205vw;top:calc((100% - 140px)/2 - 60vw)}
   #scar .scene .title{bottom:84px}
   #scar .scene h2{font-size:26px}
   #scar .stage .add{left:50%;right:auto;transform:translateX(-50%)}
