@@ -1411,27 +1411,38 @@ function stretchGL(cv,src,hands){
 function spinScene(d,key,bounded){
   d.classList.add('sp-'+key);
   /* bounded: băng đa chỉ quay được một nửa vòng (video gốc không đủ 360°) nên kéo tới 2 đầu thì dừng, không lặp vòng */
-  var cv=$('.spin',d),cx=cv.getContext('2d'),N=bounded?120:240,fr=[],a=bounded?59.5:0,vel=0,auto=false,drag=null,idle=0,last=0,shown=-1,moved=0;
+  var cv=$('.spin',d),cx=cv.getContext('2d'),N=120,a=bounded?59.5:0,vel=0,auto=false,drag=null,idle=0,last=0,shown=-1,moved=0;
   var svg=$('.sarc',d),ball=$('.sb',svg),SX=function(u){return 120+100*u},SY=function(u){return 12+40*u*u};
   (function(){var p='';for(var i=0;i<=48;i++){var u=-1+i/24;p+=(i?'L':'M')+SX(u).toFixed(1)+' '+SY(u).toFixed(1)}$('.sc',svg).setAttribute('d',p);
     $$('.tk',svg).forEach(function(c,i){var u=i-1;c.setAttribute('cx',SX(u));c.setAttribute('cy',SY(u))})})();
-  /* găng: mỗi file ghép 4 khung (lưới 2x2, mỗi ô 1600x900); băng đa: mỗi khung 1 file */
-  var Q=bounded?1:4;
-  function src(t){return AS('spin/'+key+'/'+(Q>1?'a'+('0'+t).slice(-2):('00'+t).slice(-3))+'.webp?v=3')}
-  function img(i){var t=Math.floor(i/Q);if(!fr[t]){var im=new Image();im.decoding='async';im.src=src(t);fr[t]=im}return fr[t]}
-  function put(i){var j=i%Q;cx.drawImage(img(i),(j%2)*1600,(j>>1)*900,1600,900,0,0,1600,900)}
-  img(Math.round(a)%N).onload=function(){shown=-1};
-  d._show=function(){for(var i=0;i<N;i+=Q)img(i)};
+  /* Khung xoay: nền tĩnh (bg.webp) vẽ 1 lần + vùng sản phẩm cắt riêng, 120 khung/vòng, 8 khung/file (lưới 4x2).
+     Mỗi khung được giải mã sẵn thành ImageBitmap ngoài luồng chính nên kéo xoay không bị giật; điện thoại dùng bản 0.8x.
+     Rời màn sản phẩm vài giây thì giải phóng bộ nhớ, quay lại thì nạp lại. */
+  var BX={control:[504,40,600,728],impact:[504,40,600,728],bangda:[416,200,800,544]}[key],Q=8;
+  var MOB=matchMedia('(max-width:820px)').matches,K=MOB?.8:1,cw=Math.round(BX[2]*K),ch=Math.round(BX[3]*K);
+  var bm=[],sheets=[],bg=new Image(),bgDone=false,lastLive=0;
+  bg.onload=function(){bgDone=false;shown=-1};bg.src=AS('spin2/'+key+'/bg.webp?v=1');
+  function load(t){if(sheets[t])return;sheets[t]=1;var im=new Image();im.src=AS('spin2/'+key+'/'+(MOB?'m':'d')+('0'+t).slice(-2)+'.webp?v=1');
+    (im.decode?im.decode():new Promise(function(r,j){im.onload=r;im.onerror=j})).then(function(){if(sheets[t]!==1)return;sheets[t]=2;
+      for(var j=0;j<Q;j++)(function(j){var x=(j%4)*cw,y=(j>>2)*ch,i=t*Q+j;
+        (window.createImageBitmap?createImageBitmap(im,x,y,cw,ch):Promise.reject()).then(function(b){if(sheets[t]===2){bm[i]=b;if(Math.abs(i-((Math.round(a)%N)+N)%N)<2)shown=-1}else b.close&&b.close()},
+          function(){bm[i]={im:im,x:x,y:y}})})(j)}).catch(function(){sheets[t]=0})}
+  function loadAll(){var c=Math.floor((((Math.round(a)%N)+N)%N)/Q),M=N/Q;for(var k=0;k<M;k++)load((c+(k%2?-1:1)*Math.ceil(k/2)+M)%M)}
+  function release(){bm.forEach(function(b){b&&b.close&&b.close()});bm=[];sheets=[];shown=-1}
+  function put(i){var b=bm[i];if(b.im)cx.drawImage(b.im,b.x,b.y,cw,ch,BX[0],BX[1],BX[2],BX[3]);else cx.drawImage(b,BX[0],BX[1],BX[2],BX[3])}
+  d._show=loadAll;
   function live(){return stage.classList.contains('on')&&d.classList.contains('on')}
-  function ok(im){return im&&im.complete&&im.naturalWidth}
-  function draw(){var b=Math.floor(a),t=a-b,q=Math.round(a*24)/24;if(q===shown)return;
+  function ok(i){return !!bm[i]}
+  function draw(){if(!bgDone&&bg.complete&&bg.naturalWidth){cx.globalAlpha=1;cx.drawImage(bg,0,0,1600,900);bgDone=true;shown=-1}
+    var b=Math.floor(a),t=a-b,q=Math.round(a*24)/24;if(q===shown)return;
     var i=((b%N)+N)%N,n=bounded?Math.min(i+1,N-1):(i+1)%N;
-    if(ok(img(i))&&ok(img(n))){cx.globalAlpha=1;put(i);if(t>.02){cx.globalAlpha=t;put(n);cx.globalAlpha=1}shown=q;return}
+    if(ok(i)&&ok(n)){cx.globalAlpha=1;put(i);if(t>.02){cx.globalAlpha=t;put(n);cx.globalAlpha=1}shown=q;return}
     var c=((Math.round(a)%N)+N)%N;
-    for(var k=0;k<N;k++){var j=(c+(k%2?-1:1)*Math.ceil(k/2)+N)%N;if(ok(fr[Math.floor(j/Q)])){put(j);shown=j===c?q:-1;break}}}
+    for(var k=0;k<N;k++){var j=(c+(k%2?-1:1)*Math.ceil(k/2)+N)%N;if(ok(j)){cx.globalAlpha=1;put(j);shown=j===c?q:-1;break}}}
   function clampA(){if(bounded&&(a<0||a>N-1)){a=Math.max(0,Math.min(N-1,a));vel=0}}
   function axis(){var f=((a/N)%1+1)%1,u=bounded?a/(N-1)*2-1:f<.5?f*2:f*2-2;ball.setAttribute('cx',SX(u));ball.setAttribute('cy',SY(u))}
-  (function loop(now){requestAnimationFrame(loop);var dt=Math.min(.05,(now-(last||now))/1000);last=now;if(!live())return;
+  (function loop(now){requestAnimationFrame(loop);var dt=Math.min(.05,(now-(last||now))/1000);last=now;
+    if(!live()){if(bm.length&&now-lastLive>5000)release();return}if(!bm.length&&!sheets.length)loadAll();lastLive=now;
     if(!drag){if(Math.abs(vel)>.3){a+=vel*dt;vel*=Math.exp(-dt*2.6)}else{vel=0;if(auto&&now>idle)a+=5*dt}}
     clampA();draw()})(0);
   function pw(){return cv.getBoundingClientRect().width||1}
