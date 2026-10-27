@@ -1294,6 +1294,11 @@ function submitOrder(){
     address:el.address.value.trim(),note:el.note.value.trim(),signatureLink:hasCustom()?el.sig.value.trim():'',items:cart.slice(),total:$('#cTotal').textContent};
   if(wcBridge){if(pay.classList.contains('sending'))return;pay.classList.add('sending');toast('Đang chuyển sang trang thanh toán…');
     wcSend(order);return}
+  /* đang nằm trong trang Webcake mà chưa có cầu nối: gọi lại 1 lần, không có thì báo lỗi chứ không báo "đặt thành công" giả */
+  if(parent!==window){if(pay.classList.contains('sending'))return;pay.classList.add('sending');
+    try{parent.postMessage({type:'scar-hello'},'*')}catch(e){}
+    var n=0,t=setInterval(function(){n++;if(wcBridge){clearInterval(t);toast('Đang chuyển sang trang thanh toán…');wcSend(order)}
+      else if(n>=15){clearInterval(t);pay.classList.remove('sending');toast('Chưa mở được trang thanh toán. Vui lòng tải lại trang hoặc gọi Hotline 092 191 09 99')}},200);return}
   try{var L=JSON.parse(localStorage.getItem('scar_orders')||'[]');L.push(order);localStorage.setItem('scar_orders',JSON.stringify(L))}catch(e){}
   setPay('done');
 }
