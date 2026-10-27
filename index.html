@@ -1258,8 +1258,24 @@ pay.addEventListener('submit',function(e){e.preventDefault();submitOrder()});
 $('#payShade').addEventListener('click',function(){$('#payX').click()});
 /* Cầu nối sang trang Webcake chứa trang này: mã nhúng ở trang Webcake báo "sẵn sàng", khi đó đơn được gửi sang để
    cho vào giỏ hàng Webcake và mở trang thanh toán của Webcake. Chưa có cầu nối thì lưu đơn tại máy như cũ. */
-var wcBridge=null;
+var wcBridge=null,wcData=null;
+/* mã mẫu mã (SKU) trên Webcake cho từng lựa chọn trong giỏ, khớp file nhập sản phẩm */
+function wcSku(r){var o=r.opts,g=function(x){return x.replace(' - ','-')},w=function(x){return x.replace('.','')};
+  switch(r.id){case 'sp1':return 'ECMARGS-'+o[0];case 'sp2':return 'ECMQRGS-'+o[0];case 'sp3':return 'ECMMMACSF-'+o[0];case 'sp4':return 'ECMMMAISF-'+o[0];
+    case 'sp5':return 'ECMHWSC'+(/^CUSTOM/.test(o[0])?'C':'')+o[1].replace(/[.M]/g,'');
+    case 'combo1':return 'ECMCB1-'+o[0]+'-'+g(o[1])+'-'+w(o[2]);case 'combo2':return 'ECMCB2-'+g(o[0])+'-'+w(o[1]);case 'combo3':return 'ECMCB3-'+o[0]+'-'+g(o[1])}}
+/* dựng giỏ hàng đúng dạng Webcake lưu (cart_items: mẫu mã + quantity + product) rồi gửi sang trang Webcake */
+function wcSend(order){
+  (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=1').then(function(r){return r.json()})).then(function(D){wcData=D;
+    var miss=[],items=order.items.map(function(r){var v=D.skus[wcSku(r)];if(!v){miss.push(r.name);return null}
+      return Object.assign({},v,{quantity:r.qty,product:Object.assign({},D.products[v.product_id],{variation:v})})}).filter(Boolean);
+    if(miss.length){pay.classList.remove('sending');return toast('Chưa tìm thấy sản phẩm trên Webcake: '+miss.join(', '))}
+    var note=[order.note,order.email?'Email: '+order.email:'',order.signatureLink?'Link chữ ký: '+order.signatureLink:''].filter(Boolean).join(' | ');
+    parent.postMessage({type:'scar-checkout',cart:items,customer:{full_name:order.name,phone:order.phone,email:order.email,address:order.address,note:note}},wcBridge);
+    setTimeout(function(){pay.classList.remove('sending')},4000);
+  }).catch(function(){pay.classList.remove('sending');toast('Lỗi mạng, vui lòng thử lại')})}
 addEventListener('message',function(e){var d=e.data;if(d&&d.type==='scar-bridge-ready'&&e.source===parent)wcBridge=e.origin;
+  if(d&&d.type==='scar-order-done'&&e.origin===wcBridge){cart=[];saveCart();pay.reset();pay.classList.remove('sending');setPay(null)}
   if(d&&d.type==='scar-checkout-error'&&e.origin===wcBridge){pay.classList.remove('sending');toast(d.msg||'Chưa chuyển được sang trang thanh toán, vui lòng thử lại')}});
 try{if(parent!==window)parent.postMessage({type:'scar-hello'},'*')}catch(e){}
 $('#payX').addEventListener('click',function(){if(pay.classList.contains('done')){cart=[];saveCart();pay.reset();$('#upTxt').textContent='UPLOAD ẢNH CHUYỂN KHOẢN'}setPay(null)});
@@ -1277,7 +1293,7 @@ function submitOrder(){
   var order={at:new Date().toISOString(),name:el.name.value.trim(),email:el.email.value.trim(),phone:el.phone.value.trim(),
     address:el.address.value.trim(),note:el.note.value.trim(),signatureLink:hasCustom()?el.sig.value.trim():'',items:cart.slice(),total:$('#cTotal').textContent};
   if(wcBridge){if(pay.classList.contains('sending'))return;pay.classList.add('sending');toast('Đang chuyển sang trang thanh toán…');
-    parent.postMessage({type:'scar-checkout',order:order},wcBridge);return}
+    wcSend(order);return}
   try{var L=JSON.parse(localStorage.getItem('scar_orders')||'[]');L.push(order);localStorage.setItem('scar_orders',JSON.stringify(L))}catch(e){}
   setPay('done');
 }
