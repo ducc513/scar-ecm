@@ -848,7 +848,7 @@ html:has(#scar){overflow-x:hidden}
   #scar .scene.rg .rgD{width:222vw;top:max(40px,calc((100% - 144px)/2 - 58.75vw));transform:translateX(-50%);
     -webkit-mask:linear-gradient(transparent,#000 8%,#000 78%,transparent 87%);mask:linear-gradient(transparent,#000 8%,#000 78%,transparent 87%)}
   /* nền phủ kín màn: ảnh cảnh làm mờ, tối bớt, để không còn khoảng trống trên/dưới */
-  #scar .scene.rg .rgbg{display:block;position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(26px) brightness(.5);transform:scale(1.1)}
+  #scar .scene .rgbg{display:block;position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(26px) brightness(.5);transform:scale(1.1)}
   #scar .scene.rg .title{display:block}
   #scar .rgD .rgmore{display:none}
   #scar .rgD .rgmore{--f:calc(222vw/1920)}
@@ -856,7 +856,11 @@ html:has(#scar){overflow-x:hidden}
   #scar .rgmore svg{width:46px;height:15px}
   #scar .title .rgmore{display:flex;--f:calc(100vw/700);top:auto;bottom:calc(100% + 14px)}
   #scar .title .rgmore::before{left:-22%;right:-22%;top:-18%;bottom:-24%;background:radial-gradient(closest-side,rgba(2,8,9,.92),rgba(2,8,9,.7) 55%,transparent)}
-  #scar .scene video,#scar .scene .spin{width:205vw;top:43%;-webkit-mask:none;mask:none}
+  #scar .scene video{width:205vw;top:43%;-webkit-mask:none;mask:none}
+  /* găng, băng đa: căn sản phẩm vào giữa khoảng trống giữa nút trên cùng và cụm tên, mờ dần mép trên/dưới cho liền nền */
+  #scar .scene .spin{width:205vw;top:calc((100% - 140px)/2 - 51.9vw);transform:translateX(-50%);
+    -webkit-mask:linear-gradient(transparent,#000 7%,#000 80%,transparent);mask:linear-gradient(transparent,#000 7%,#000 80%,transparent)}
+  #scar .scene.sp-bangda .spin{top:calc((100% - 140px)/2 - 60vw)}
   #scar .scene .title{bottom:84px}
   #scar .scene h2{font-size:26px}
   #scar .stage .add{left:50%;right:auto;transform:translateX(-50%)}
@@ -1292,7 +1296,7 @@ singles.forEach(function(p,i){
       '<div class="mt par" style="top:'+rg.ptop+'px"><b>'+rg.par.map(function(l){return '<b>'+l+'</b>'}).join('')+'</b></div></div></div></div>'+
       '<div class="title"><button class="rgmore" type="button" aria-label="Xem chi tiết"><svg viewBox="0 0 62 20"><path d="M3 18L31 3l28 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>XEM CHI TIẾT</span></button><h2>'+s.title+'</h2><p class="hint">'+s.hint+'</p></div>';
   }else
-  d.innerHTML='<div class="media">'+(s.spin?'<canvas class="spin" width="1600" height="900" role="img" aria-label="'+s.title+'"></canvas>':s.video?'<video muted loop playsinline preload="none" poster="'+A+s.poster+'" data-src="'+A+s.video+'"></video>':
+  d.innerHTML='<div class="media">'+(s.spin?'<div class="rgbg" style="background-image:url('+AS('spin2/'+s.spin+'/bg.webp?v=1')+')"></div><canvas class="spin" width="1600" height="900" role="img" aria-label="'+s.title+'"></canvas>':s.video?'<video muted loop playsinline preload="none" poster="'+A+s.poster+'" data-src="'+A+s.video+'"></video>':
     '<canvas class="stretch" width="1920" height="1080" role="img" aria-label="'+s.title+'"></canvas>')+'</div><div class="vignette"></div><span class="paused-tag">TẠM DỪNG</span>'+
     '<div class="title"><span class="more">XEM CHI TIẾT</span><button class="caret" aria-label="Xem chi tiết"><svg viewBox="0 0 60 21" fill="none" stroke="currentColor" stroke-width="3.2"><path d="M1.5 19.5L30 2l28.5 17.5"/></svg></button><h2>'+s.title+'</h2><p class="hint">'+s.hint+'</p></div>';
   if(s.spin){var ct=$('.title .caret',d);ct.outerHTML='<button class="rgmore" type="button" aria-label="Xem chi tiết"><svg viewBox="0 0 62 20"><path d="M3 18L31 3l28 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>XEM CHI TIẾT</span></button><svg class="sarc" viewBox="0 0 240 64" aria-label="Kéo để xoay sản phẩm"><path class="sc"></path><circle class="tk" r="3"></circle><circle class="tk" r="3"></circle><circle class="tk" r="3"></circle><circle class="sb" r="7"></circle></svg>'}
