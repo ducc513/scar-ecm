@@ -1287,13 +1287,18 @@ var vnData=null;function vnLoad(){if(vnData)return;vnData=1;fetch(A+'vn34.json?v
 function vnWard(){var s=pay.elements.prov,o=s.options[s.selectedIndex],i=o&&o.getAttribute('data-i');
   pay.elements.ward.innerHTML='<option value="">'+(i?'Chọn':'Chọn tỉnh trước')+'</option>'+(i?vnData[i][1].map(function(w){return '<option>'+w+'</option>'}).join(''):'')}
 pay.elements.prov.addEventListener('change',vnWard);
+function thumb(u){return new Promise(function(ok,no){var i=new Image();i.onload=function(){var k=240/Math.max(i.naturalWidth,i.naturalHeight),c=document.createElement('canvas');
+  c.width=Math.round(i.naturalWidth*k);c.height=Math.round(i.naturalHeight*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);try{ok(c.toDataURL('image/jpeg',.82))}catch(e){no(e)}};i.onerror=no;i.src=u})}
 function wcSend(order){
   (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=1').then(function(r){return r.json()})).then(function(D){wcData=D;
     var miss=[],items=order.items.map(function(r){var v=D.skus[wcSku(r)];if(!v){miss.push(r.name);return null}
       return Object.assign({},v,{quantity:r.qty,product:Object.assign({},D.products[v.product_id],{variation:v})})}).filter(Boolean);
     if(miss.length){pay.classList.remove('sending');return toast('Chưa tìm thấy sản phẩm trên Webcake: '+miss.join(', '))}
     var note=[order.note,order.email?'Email: '+order.email:'',order.signatureLink?'Link chữ ký: '+order.signatureLink:''].filter(Boolean).join(' | ');
-    parent.postMessage({type:'scar-checkout',cart:items,customer:{full_name:order.name,phone:order.phone,email:order.email,address:order.address,province:order.province,ward:order.ward,note:note}},wcBridge);
+    /* ảnh sản phẩm trong giỏ Webcake không tải được từ github.io, nên gửi kèm bản ảnh nhỏ dạng data: để trang thanh toán thay vào */
+    var urls=(JSON.stringify(items).match(/https:\/\/ducc513\.github\.io\/[^"]+?\.(jpg|webp|png)/g)||[]).filter(function(u,i,a){return a.indexOf(u)===i});
+    Promise.all(urls.map(function(u){return thumb(u).then(function(x){return [u,x]},function(){return [u,'']})})).then(function(T){var thumbs={};T.forEach(function(t){if(t[1])thumbs[t[0]]=t[1]});
+      parent.postMessage({type:'scar-checkout',cart:items,thumbs:thumbs,customer:{full_name:order.name,phone:order.phone,email:order.email,address:order.address,province:order.province,ward:order.ward,note:note}},wcBridge)});
     setTimeout(function(){pay.classList.remove('sending')},4000);
   }).catch(function(){pay.classList.remove('sending');toast('Lỗi mạng, vui lòng thử lại')})}
 addEventListener('message',function(e){var d=e.data;/* Webcake chạy mã nhúng trong một khung con của trang, nên lời báo có thể đến từ khung con đó */
