@@ -1274,7 +1274,8 @@ function wcSend(order){
     parent.postMessage({type:'scar-checkout',cart:items,customer:{full_name:order.name,phone:order.phone,email:order.email,address:order.address,note:note}},wcBridge);
     setTimeout(function(){pay.classList.remove('sending')},4000);
   }).catch(function(){pay.classList.remove('sending');toast('Lỗi mạng, vui lòng thử lại')})}
-addEventListener('message',function(e){var d=e.data;if(d&&d.type==='scar-bridge-ready'&&e.source===parent)wcBridge=e.origin;
+addEventListener('message',function(e){var d=e.data;/* Webcake chạy mã nhúng trong một khung con của trang, nên lời báo có thể đến từ khung con đó */
+  if(d&&d.type==='scar-bridge-ready'&&e.source&&(e.source===parent||e.source.parent===parent))wcBridge=e.origin;
   if(d&&d.type==='scar-order-done'&&e.origin===wcBridge){cart=[];saveCart();pay.reset();pay.classList.remove('sending');setPay(null)}
   if(d&&d.type==='scar-checkout-error'&&e.origin===wcBridge){pay.classList.remove('sending');toast(d.msg||'Chưa chuyển được sang trang thanh toán, vui lòng thử lại')}});
 try{if(parent!==window)parent.postMessage({type:'scar-hello'},'*')}catch(e){}
