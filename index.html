@@ -1257,6 +1257,8 @@ function hasCustom(){return cart.some(function(r){return r.id==='sp5'&&/^CUSTOM/
 function setPay(st){if(st)vnLoad();pay.className='pay'+(st?' on '+st:'')+(hasCustom()?' sig':'');$('#payShade').classList.toggle('on',!!st);document.documentElement.style.overflow=st?'hidden':''}
 ckBtn.addEventListener('click',function(){
   if(!cart.length) return toast('Bạn chưa chọn sản phẩm nào');
+  /* trên web thật: sang thẳng trang thanh toán Webcake (khách điền thông tin + quét QR ở đó); băng đa Custom vẫn qua popup để lấy link chữ ký */
+  if(parent!==window&&!hasCustom()&&goWebcake({at:new Date().toISOString(),name:'',email:'',phone:'',address:'',province:'',ward:'',note:'',signatureLink:'',items:cart.slice(),total:$('#cTotal').textContent}))return;
   setPay('form');if(matchMedia('(pointer:fine)').matches)setTimeout(function(){pay.elements.name.focus()},300);
 });
 pay.addEventListener('submit',function(e){e.preventDefault();submitOrder()});
@@ -1294,6 +1296,16 @@ $('#payX').addEventListener('click',function(){if(pay.classList.contains('done')
 pay.elements.proof.addEventListener('change',function(){var f=this.files[0];$('#upTxt').textContent=f?'ĐÃ CHỌN: '+f.name:'UPLOAD ẢNH CHUYỂN KHOẢN';
   $('.up',pay).classList.toggle('ok',!!f)});
 pay.addEventListener('input',function(e){e.target.closest('label')&&e.target.closest('label').classList.remove('bad')});
+/* Gửi giỏ sang trang Webcake chứa trang này. Trả về true nếu đang nằm trong Webcake (đã xử lý) */
+function goWebcake(order){
+  if(wcBridge){if(pay.classList.contains('sending'))return true;pay.classList.add('sending');toast('Đang chuyển sang trang thanh toán…');
+    wcSend(order);return true}
+  /* đang nằm trong trang Webcake mà chưa có cầu nối: gọi lại 1 lần, không có thì báo lỗi chứ không báo "đặt thành công" giả */
+  if(parent!==window){if(pay.classList.contains('sending'))return true;pay.classList.add('sending');
+    try{parent.postMessage({type:'scar-hello'},'*')}catch(e){}
+    var n=0,t=setInterval(function(){n++;if(wcBridge){clearInterval(t);toast('Đang chuyển sang trang thanh toán…');wcSend(order)}
+      else if(n>=15){clearInterval(t);pay.classList.remove('sending');toast('Chưa mở được trang thanh toán. Vui lòng tải lại trang hoặc gọi Hotline 092 191 09 99')}},200);return true}
+  return false}
 function submitOrder(){
   var el=pay.elements,bad=null;
   ['name','email','phone','address','prov','ward'].forEach(function(k){var ok=el[k].value.trim()&&el[k].checkValidity();
@@ -1304,13 +1316,7 @@ function submitOrder(){
   if(bad){bad.focus();return toast('Vui lòng điền đủ và đúng thông tin')}
   var order={at:new Date().toISOString(),name:el.name.value.trim(),email:el.email.value.trim(),phone:el.phone.value.trim(),
     address:el.address.value.trim(),province:el.prov.value,ward:el.ward.value,note:el.note.value.trim(),signatureLink:hasCustom()?el.sig.value.trim():'',items:cart.slice(),total:$('#cTotal').textContent};
-  if(wcBridge){if(pay.classList.contains('sending'))return;pay.classList.add('sending');toast('Đang chuyển sang trang thanh toán…');
-    wcSend(order);return}
-  /* đang nằm trong trang Webcake mà chưa có cầu nối: gọi lại 1 lần, không có thì báo lỗi chứ không báo "đặt thành công" giả */
-  if(parent!==window){if(pay.classList.contains('sending'))return;pay.classList.add('sending');
-    try{parent.postMessage({type:'scar-hello'},'*')}catch(e){}
-    var n=0,t=setInterval(function(){n++;if(wcBridge){clearInterval(t);toast('Đang chuyển sang trang thanh toán…');wcSend(order)}
-      else if(n>=15){clearInterval(t);pay.classList.remove('sending');toast('Chưa mở được trang thanh toán. Vui lòng tải lại trang hoặc gọi Hotline 092 191 09 99')}},200);return}
+  if(goWebcake(order))return;
   try{var L=JSON.parse(localStorage.getItem('scar_orders')||'[]');L.push(order);localStorage.setItem('scar_orders',JSON.stringify(L))}catch(e){}
   setPay('done');
 }
