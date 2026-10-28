@@ -1110,7 +1110,7 @@ var PRODUCTS=[
   desc:'BỘ SƯU TẬP SCAR 02 VẬT PHẨM BAO GỒM 01 GĂNG MMA SPARRING, 01 BỘ RASHGUARD SCAR',
   opts:[{label:'RASHGUARD',values:SIZES_RG},{label:'GĂNG MMA SPARRING SCAR',values:GLOVE}]}
 ];
-PRODUCTS.forEach(function(p){p.photos=[1,2,3,4,5].map(function(i){return A+'sp/'+p.id+'_'+i+'.webp'})});
+PRODUCTS.forEach(function(p){p.photos=[1,2,3,4,5].map(function(i){return A+'sp/'+p.id+'_'+i+'.webp?v=3'})});
 /* Thứ tự đúng design: bấm mũi tên phải từ Lượng sang Kamil, rồi Y.
    cap/capNick: chữ dưới slider; name/nick: chữ trong khung chi tiết; row: thứ tự ảnh nhỏ trong khung chi tiết */
 var FIGHTERS=[
@@ -1118,7 +1118,7 @@ var FIGHTERS=[
  {key:'22k',face:4,row:[2,1,3],name:'KAMIL',nick:'NGUYEN VAN',cap:'KAMIL NGUYEN VAN',capNick:'',quote:'If you really want something, you\'ll always find the way.<br>Way forward is the only way.'},
  {key:'22y',face:3,row:[4,2,1],name:'NGHIEM VAN Y',nick:'“EASY Y”',cap:'NGHIEM VAN Y',capNick:'“EASY Y”',quote:'Under the pressure of the cage, a scar isn\'t just a story of pain<br>It\'s a blueprint guiding the path to the perfect submission'}
 ];
-FIGHTERS.forEach(function(f){var src=function(i){return A+'lb/lb_'+f.key+'_'+i+'.webp?v=2'};
+FIGHTERS.forEach(function(f){var src=function(i){return A+'lb/lb_'+f.key+'_'+i+'.webp?v=3'};
   f.photos=[src(f.face)].concat(f.row.map(src))});
 
 /* ======================= Tiện ích ======================= */
