@@ -1110,7 +1110,10 @@ var PRODUCTS=[
   desc:'BỘ SƯU TẬP SCAR 02 VẬT PHẨM BAO GỒM 01 GĂNG MMA SPARRING, 01 BỘ RASHGUARD SCAR',
   opts:[{label:'RASHGUARD',values:SIZES_RG},{label:'GĂNG MMA SPARRING SCAR',values:GLOVE}]}
 ];
-PRODUCTS.forEach(function(p){p.photos=[1,2,3,4,5].map(function(i){return A+'sp/'+p.id+'_'+i+'.webp?v=3'})});
+/* bộ ảnh từng sản phẩm (note FIXX WEB 28/10): bỏ ảnh kéo quần (sp2_3) và ảnh lưng áo (sp1_4); combo dùng ảnh sản phẩm của trang BST */
+var PHOTOS={sp1:['sp1_1','sp1_2','sp1_3','sp1_5'],sp2:['sp2_1','sp2_2','sp2_4','sp2_5'],
+  combo1:['sp1_1','sp2_1','sp3_1','sp5_2','sp4_2'],combo2:['sp3_1','sp3_2','sp4_2','sp4_1','sp5_2'],combo3:['sp1_1','sp2_2','sp3_1','sp4_2','sp1_3']};
+PRODUCTS.forEach(function(p){p.photos=(PHOTOS[p.id]||[1,2,3,4,5].map(function(i){return p.id+'_'+i})).map(function(n){return A+'sp/'+n+'.webp?v=3'})});
 /* Thứ tự đúng design: bấm mũi tên phải từ Lượng sang Kamil, rồi Y.
    cap/capNick: chữ dưới slider; name/nick: chữ trong khung chi tiết; row: thứ tự ảnh nhỏ trong khung chi tiết */
 var FIGHTERS=[
@@ -1179,7 +1182,13 @@ ivs.forEach(function(w){var v=$('video',w),bar=$('.ibar',w),fill=$('.ibar i',w),
   $('.isnd',w).addEventListener('click',function(){ivSound=v.muted;v.muted=!ivSound;ivLbl(w);if(v.paused){w._up=false;ivStart()}});
   $('.ifs',w).addEventListener('click',function(){ivSound=true;v.muted=false;ivLbl(w);if(v.paused){w._up=false;ivStart()}
     if(document.fullscreenElement||document.webkitFullscreenElement){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return}
+    /* điện thoại: dùng toàn màn hình của chính video (nút điều khiển của máy, xoay ngang) vì khung tự làm bị kẹt không bấm được */
+    if(matchMedia('(hover:none)').matches&&(v.requestFullscreen||v.webkitEnterFullscreen)){v.controls=true;
+      var q=v.requestFullscreen?v.requestFullscreen():(v.webkitEnterFullscreen(),null);
+      q&&q.then(function(){try{screen.orientation.lock('landscape').catch(function(){})}catch(x){}}).catch(function(){});return}
     if(w.requestFullscreen)w.requestFullscreen().catch(function(){});else if(w.webkitRequestFullscreen)w.webkitRequestFullscreen();else if(v.webkitEnterFullscreen)v.webkitEnterFullscreen()});
+  ['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){document.addEventListener(ev,function(){if(!(document.fullscreenElement||document.webkitFullscreenElement))v.controls=false})});
+  v.addEventListener('webkitendfullscreen',function(){v.controls=false});
   function upd(){var d=v.duration||0,f=d?v.currentTime/d:0;fill.style.width=f*100+'%';bar.style.setProperty('--p',f*100+'%');var tx=tfmt(v.currentTime)+' / '+tfmt(d);if(tm.textContent!==tx)tm.textContent=tx}
   ['timeupdate','loadedmetadata','seeked'].forEach(function(ev){v.addEventListener(ev,upd)});
   (function lp(){requestAnimationFrame(lp);if(!v.paused&&!dr)upd()})();
@@ -1409,7 +1418,7 @@ function openDetail(p){var d=$('#sDetail');$('h3',d).textContent=p.scene.title;$
   $('.dtrk',d).innerHTML=ph.map(function(s,i){return '<img src="'+s+'" alt="'+p.scene.title+'"'+(L&&!i?' class="w"':'')+' draggable="false">'}).join('');
   $('.dstrip',d).scrollLeft=0;$$('.dtrk img',d).forEach(function(im){im.addEventListener('load',dArr)});d.classList.add('on');stage.classList.add('dt');setTimeout(dArr,30)}
 /* ảnh ngang (3:2) trong bộ ảnh của từng sản phẩm, đưa lên đầu dải như design */
-var DLAND={sp1:2,sp2:3,sp3:4};
+var DLAND={sp1:2,sp3:4};
 var dst=$('#sDetail .dstrip'),dmv=null;
 function dArr(){var m=dst.scrollWidth-dst.clientWidth;$('#sDetail .dar.l').classList.toggle('off',dst.scrollLeft<4);$('#sDetail .dar.r').classList.toggle('off',dst.scrollLeft>m-4)}
 dst.addEventListener('scroll',dArr);addEventListener('resize',dArr);
@@ -1648,7 +1657,10 @@ new IntersectionObserver(function(es){es.forEach(function(e){if(cur!=='lb')retur
 volCtl($('.tctl .vol',tvb),tv,function(m){tvSound=!m;tv.muted=m;tvLbl();if(!m&&tv.paused){tvb._userPaused=false;tvPlay()}});
 tvs.addEventListener('click',function(e){e.stopPropagation();tvSound=tv.muted;tv.muted=!tvSound;tvLbl();if(tv.paused){tvb._userPaused=false;tvPlay()}});
 $('#tvcFs').addEventListener('click',function(){tvSound=true;tvPlay();
-  if(tv.requestFullscreen)tv.requestFullscreen().catch(function(){});else if(tv.webkitEnterFullscreen)tv.webkitEnterFullscreen();else if(tvb.webkitRequestFullscreen)tvb.webkitRequestFullscreen()});
+  tv.controls=true;
+  if(tv.requestFullscreen)tv.requestFullscreen().then(function(){try{screen.orientation.lock('landscape').catch(function(){})}catch(x){}}).catch(function(){tv.controls=false});else if(tv.webkitEnterFullscreen)tv.webkitEnterFullscreen();else if(tvb.webkitRequestFullscreen)tvb.webkitRequestFullscreen()});
+['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){document.addEventListener(ev,function(){if(!(document.fullscreenElement||document.webkitFullscreenElement))tv.controls=false})});
+tv.addEventListener('webkitendfullscreen',function(){tv.controls=false});
 /* thanh tua: bấm hoặc kéo để tua, phím trái/phải tua 5 giây */
 var tsk=$('#tvcSeek'),tbar=$('#tvcBar'),ttm=$('#tvcTime'),tdrag=false;
 function tfmt(t){t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+':'+('0'+t%60).slice(-2)}
@@ -1686,7 +1698,7 @@ $('#pUp').addEventListener('click',function(){pi=(pi-1+list().length)%list().len
 $('#pDown').addEventListener('click',function(){pi=(pi+1)%list().length;renderPO(true)});
 $('#pAdd').addEventListener('click',function(){addToCart(list()[pi],sel.slice())});
 $('#pMore').addEventListener('click',function(){
-  var p=list()[pi],h=[4,3,1,2,0].map(function(i){return p.photos[i]}).map(function(s){return '<img src="'+s+'" alt="'+p.name+'" draggable="false">'}).join('');
+  var p=list()[pi],h=[4,3,1,2,0].map(function(i){return p.photos[i]}).filter(Boolean).map(function(s){return '<img src="'+s+'" alt="'+p.name+'" draggable="false">'}).join('');
   $('#galRail').innerHTML=h+h;
   $('#shade').classList.add('on');$('#gal').classList.add('on');$('#galRail').scrollLeft=matchMedia('(min-width:900px)').matches?$('#galRail img').offsetWidth+parseFloat(getComputedStyle($('#galRail')).columnGap||0):0;
   galAuto.start()});
