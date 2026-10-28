@@ -1076,12 +1076,12 @@ var PRODUCTS=[
  {id:'sp1',kind:'single',name:'SCAR RASHGUARD SHIRT',tag:'EPIC COMBAT MOMENTS',price:459000,cut:'pk_sp1',
   desc:'Khi đang tập, thứ duy nhất nên nằm trong đầu bạn là đối thủ, không phải chiếc áo xô lệch hay nặng mồ hôi. ECM SCAR Rashguard được làm để bạn quên rằng mình đang mặc nó.',
   opts:[{label:'',values:SIZES_RG}],
-  scene:{title:'RASHGUARD SHIRT',hint:'KÉO CÁC GÓC ĐỂ CẢM NHẬN ĐỘ CO GIÃN SẢN PHẨM',img:'ui/scene_shirt.webp?v=2',hands:[[700,195],[1290,150],[640,780],[1340,700]],
+  scene:{title:'RASHGUARD SHIRT',hint:'KÉO CÁC GÓC ĐỂ CẢM NHẬN ĐỘ CO GIÃN SẢN PHẨM',img:'ui/scene_shirt.webp?v=3',hands:[[700,195],[1290,150],[640,780],[1340,700]],
    long:'ECM SCAR Rashguard ôm sát như lớp da thứ hai nhờ vải co giãn nhẹ nhàng <b>(82% Polyester, 18% Spandex, 180 gsm)</b>, không xô lệch khi vận động. Cấu trúc 6 mảnh với 2 mảng lưới bên sườn thoát mồ hôi nhanh, giữ áo luôn nhẹ qua nhiều hiệp tập. Chất vải cao cấp hạn chế xù và bám mùi vượt trội, giúp bạn tập trung hoàn toàn vào đối thủ.'}},
  {id:'sp2',kind:'single',name:'SCAR RASHGUARD SHORT',tag:'EPIC COMBAT MOMENTS',price:439000,cut:'pk_sp2',
   desc:'Khi đang tập, thứ duy nhất nên nằm trong đầu bạn là đối thủ, không phải chiếc quần xô lệch hay nặng mồ hôi. ECM SCAR Shorts được làm để bạn quên rằng mình đang mặc nó.',
   opts:[{label:'',values:SIZES_RG}],
-  scene:{title:'RASHGUARD SHORT',hint:'KÉO CÁC GÓC ĐỂ CẢM NHẬN ĐỘ CO GIÃN SẢN PHẨM',img:'ui/scene_short.webp?v=2',hands:[[665,175],[1255,235],[1480,655]],
+  scene:{title:'RASHGUARD SHORT',hint:'KÉO CÁC GÓC ĐỂ CẢM NHẬN ĐỘ CO GIÃN SẢN PHẨM',img:'ui/scene_short.webp?v=3',hands:[[665,175],[1255,235],[1480,655]],
    long:'ECM SCAR Shorts giúp bạn tung cú đá hết biên độ nhờ thiết kế đũng quần thoải mái, hoàn toàn không gây bó hay cản trở khi nâng chân. Chất vải co giãn nhẹ nhàng (82% Polyester, 18% Spandex, 180 gsm) ôm vừa vặn, đảm bảo sự tự do tối đa trong từng đòn đánh. Bên cạnh đó, chất liệu chuyên dụng từ ECM còn hạn chế xù và bám mùi vượt trội, giữ quần luôn bền bỉ qua thời gian dài tập luyện.'}},
  {id:'sp3',kind:'single',name:'SCAR CONTROL MMA SPARRING',tag:'OPEN HAND FULL CONTROL',price:1499000,cut:'pk_sp3',
   desc:'Không phải trận nào cũng kết thúc khi đứng. Khi cuộc đấu xuống sàn, thứ quyết định là độ bám, cảm giác tay và từng chuyển đổi. SCAR Control được làm cho những khoảnh khắc đó, tối ưu cho grappling, đánh nằm và khóa siết.',
@@ -1366,7 +1366,7 @@ singles.forEach(function(p,i){
   var s=p.scene,d=document.createElement('section');d.className='scene';
   var rg=RG[p.id];
   if(rg){d.classList.add('rg');
-    d.innerHTML='<div class="media"><div class="rgbg" style="background-image:url('+AS('ui/rg_'+rg.key+'.webp?v=2')+')"></div><div class="rgD"><canvas class="rgc" width="1920" height="1080" role="img" aria-label="'+s.title+'"></canvas><img class="rgglow" alt="" src="'+AS('ui/rg_'+rg.key+'_glow.webp?v=2')+'"><button class="rgmore" type="button" aria-label="Xem chi tiết"><svg viewBox="0 0 62 20"><path d="M3 18L31 3l28 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>XEM CHI TIẾT</span></button></div>'+
+    d.innerHTML='<div class="media"><div class="rgbg" style="background-image:url('+AS('ui/rg_'+rg.key+'.webp?v=3')+')"></div><div class="rgD"><canvas class="rgc" width="1920" height="1080" role="img" aria-label="'+s.title+'"></canvas><img class="rgglow" alt="" src="'+AS('ui/rg_'+rg.key+'_glow.webp?v=2')+'"><button class="rgmore" type="button" aria-label="Xem chi tiết"><svg viewBox="0 0 62 20"><path d="M3 18L31 3l28 15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>XEM CHI TIẾT</span></button></div>'+
       '<div class="rgM"><div class="box"><div class="mt ttl"><b>'+s.title+'</b></div><div class="mt sub"><b>'+s.hint+'</b></div>'+
       '<canvas class="rgc" width="'+(391*3)+'" height="'+(rg.mh*3)+'" style="height:'+rg.mh+'px" role="img" aria-label="'+s.title+'"></canvas>'+
       '<div class="rgstrip"><div class="trk">'+[0,1,2].map(function(k){return '<img alt="" draggable="false" src="'+AS('ui/rg_'+rg.key+'_s'+k+'.webp')+'">'}).join('')+'</div></div>'+
@@ -1554,13 +1554,13 @@ function rgScene(d,p,rg){
   var TEXT={x:680,y:910,w:560,h:100},NEAR=210;
   function live(){return stage.classList.contains('on')&&d.classList.contains('on')}
   function dist(q,r){var dx=Math.max(r.x-q.x,0,q.x-(r.x+r.w)),dy=Math.max(r.y-q.y,0,q.y-(r.y+r.h));return Math.sqrt(dx*dx+dy*dy)}
-  rgGL(cvD,{img:AS('ui/rg_'+rg.key+'.webp?v=2'),fab:AS('ui/rg_'+rg.key+'_fab.webp?v=2'),mk:AS('ui/rg_'+rg.key+'_mk.webp'),smoke:AS('ui/rg_'+rg.key+'_smoke.webp'),W:1920,H:1080,K:1,hands:rg.hands,AMP:13,DRAGMAX:48,HIT:125,SIG:150,R:380,
+  rgGL(cvD,{img:AS('ui/rg_'+rg.key+'.webp?v=3'),fab:AS('ui/rg_'+rg.key+'_fab.webp?v=3'),mk:AS('ui/rg_'+rg.key+'_mk.webp'),smoke:AS('ui/rg_'+rg.key+'_smoke.webp'),W:1920,H:1080,K:1,hands:rg.hands,AMP:13,DRAGMAX:48,HIT:125,SIG:150,R:380,
     on:function(){return live()&&!RG_MQ.matches&&!$('#sDetail').classList.contains('on')},
     hover:function(q){if(dist(q,TEXT)<24)return 'pointer';return ''},
     move:function(q){var dd=dist(q,TEXT);glow.style.opacity=dd>=NEAR?0:Math.pow(1-dd/NEAR,1.3)},
     leave:function(){glow.style.opacity=0},
     click:function(q){if(dist(q,TEXT)<24)openDetail(p)}});
-  rgGL(cvM,{img:AS('ui/rg_'+rg.key+'_m.webp'),fab:AS('ui/rg_'+rg.key+'_m_fab.webp'),mk:AS('ui/rg_'+rg.key+'_m_mk.webp'),W:391*3,H:rg.mh*3,K:3,hands:rg.mHands,AMP:5.5,DRAGMAX:26,HIT:48,SIG:62,R:125,
+  rgGL(cvM,{img:AS('ui/rg_'+rg.key+'_m.webp?v=3'),fab:AS('ui/rg_'+rg.key+'_m_fab.webp?v=3'),mk:AS('ui/rg_'+rg.key+'_m_mk.webp'),W:391*3,H:rg.mh*3,K:3,hands:rg.mHands,AMP:5.5,DRAGMAX:26,HIT:48,SIG:62,R:125,
     on:function(){return live()&&RG_MQ.matches}});
   /* khớp chữ theo bề rộng thiết kế */
   var fits=[[$('.ttl b',box),rg.key==='shirt'?279:295],[$('.sub b',box),203],[$('.par>b',box),rg.key==='shirt'?332:296]];
