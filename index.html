@@ -209,6 +209,10 @@ html:has(#scar){overflow-x:hidden}
 #scar .pay .pf label:focus-within{border-color:rgba(224,191,132,.6);box-shadow:0 0 14px rgba(224,191,132,.18)}
 #scar .pay .pf label.bad{border-color:#c0583d}
 #scar .pay .pf span{white-space:nowrap;font-size:15px;color:#e6d1a2}
+#scar .pay .pf .adr2{display:flex;gap:12px}#scar .pay .pf .adr2 label{flex:1;min-width:0}
+#scar .pay select{flex:1;min-width:0;background:none;border:0;outline:0;color:#f3e3bf;font:inherit;font-size:15px;-webkit-appearance:none;appearance:none;cursor:pointer;padding-right:16px;background:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 10 6%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 fill=%27none%27 stroke=%27%23e6d1a2%27 stroke-width=%271.2%27/%3E%3C/svg%3E") right center/10px 6px no-repeat;text-overflow:ellipsis}
+#scar .pay select option{background:#031513;color:#f3e3bf}
+@media (max-width:440px){#scar .pay .pf .adr2{display:block}}
 #scar .pay input,#scar .pay textarea{flex:1;min-width:0;background:none;border:0;outline:0;color:#f3e3bf;font:inherit;font-size:15px;caret-color:#e6d1a2}
 #scar .pay .pf .note{align-items:flex-start;min-height:150px;padding-top:12px}
 #scar .pay .pf .note textarea{resize:none;align-self:stretch;min-height:120px}
@@ -883,7 +887,7 @@ html:has(#scar){overflow-x:hidden}
 #scar .pay .pq{display:none!important}
 #scar .pay h2{font-size:22px!important;margin:0 0 18px!important;line-height:1.2!important;padding-right:36px}
 #scar .pay .pf label{height:auto!important;min-height:44px!important;margin-bottom:12px!important;padding:0 12px!important;gap:8px!important}
-#scar .pay .pf span,#scar .pay input,#scar .pay textarea{font-size:14px!important}
+#scar .pay .pf span,#scar .pay input,#scar .pay textarea,#scar .pay select{font-size:14px!important}
 #scar .pay .pf .note{min-height:96px!important;padding-top:12px!important}#scar .pay .pf .note textarea{min-height:72px!important;height:auto!important}
 #scar .pay .x{top:22px!important;right:20px!important;width:24px!important;height:24px!important}
 #scar .pay .go{display:block;width:100%;margin-top:6px;padding:14px;font-size:15px;letter-spacing:.06em}
@@ -962,7 +966,8 @@ html:has(#scar){overflow-x:hidden}
           <label><span>HỌ VÀ TÊN:</span><input name="name" autocomplete="name" required></label>
           <label><span>EMAIL:</span><input name="email" type="email" autocomplete="email" required></label>
           <label><span>SĐT LIÊN HỆ:</span><input name="phone" type="tel" autocomplete="tel" required></label>
-          <label><span>ĐỊA CHỈ NHẬN HÀNG:</span><input name="address" autocomplete="street-address" placeholder="Số nhà, đường, phường/xã, tỉnh/thành phố" required></label>
+          <label><span>ĐỊA CHỈ NHẬN HÀNG:</span><input name="address" autocomplete="street-address" placeholder="Số nhà, tên đường" required></label>
+          <div class="adr2"><label><span>TỈNH/TP:</span><select name="prov" required><option value=""></option></select></label><label><span>PHƯỜNG/XÃ:</span><select name="ward" required><option value=""></option></select></label></div>
           <label class="sig"><span>LINK DRIVE ẢNH CHỮ KÝ:</span><input name="sig" type="url" inputmode="url" placeholder="https://drive.google.com/..."></label>
           <p class="signote">* Dành cho băng đa Custom. Nhớ để link ở chế độ công khai (Bất kỳ ai có đường liên kết đều xem được).</p>
           <label class="note"><span>GHI CHÚ:</span><textarea name="note"></textarea></label>
@@ -1249,7 +1254,7 @@ $('#cRows').addEventListener('click',function(e){
 /* Thanh toán: bấm THANH TOÁN mở form (design TT), bấm XÁC NHẬN gửi đơn rồi hiện lời cảm ơn (design TT2) */
 var pay=$('#pay'),poTop=$('.po-top'),ckBtn=$('#checkout');
 function hasCustom(){return cart.some(function(r){return r.id==='sp5'&&/^CUSTOM/.test(r.opts[0]||'')})}
-function setPay(st){pay.className='pay'+(st?' on '+st:'')+(hasCustom()?' sig':'');$('#payShade').classList.toggle('on',!!st);document.documentElement.style.overflow=st?'hidden':''}
+function setPay(st){if(st)vnLoad();pay.className='pay'+(st?' on '+st:'')+(hasCustom()?' sig':'');$('#payShade').classList.toggle('on',!!st);document.documentElement.style.overflow=st?'hidden':''}
 ckBtn.addEventListener('click',function(){
   if(!cart.length) return toast('Bạn chưa chọn sản phẩm nào');
   setPay('form');if(matchMedia('(pointer:fine)').matches)setTimeout(function(){pay.elements.name.focus()},300);
@@ -1265,13 +1270,19 @@ function wcSku(r){var o=r.opts,g=function(x){return x.replace(' - ','-')},w=func
     case 'sp5':return 'ECMHWSC'+(/^CUSTOM/.test(o[0])?'C':'')+o[1].replace(/[.M]/g,'');
     case 'combo1':return 'ECMCB1-'+o[0]+'-'+g(o[1])+'-'+w(o[2]);case 'combo2':return 'ECMCB2-'+g(o[0])+'-'+w(o[1]);case 'combo3':return 'ECMCB3-'+o[0]+'-'+g(o[1])}}
 /* dựng giỏ hàng đúng dạng Webcake lưu (cart_items: mẫu mã + quantity + product) rồi gửi sang trang Webcake */
+/* Tỉnh/Phường theo danh mục sau sáp nhập (34 tỉnh), để Webcake tạo đơn luôn mà không phải điền lại */
+var vnData=null;function vnLoad(){if(vnData)return;vnData=1;fetch(A+'vn34.json?v=1').then(function(r){return r.json()}).then(function(D){vnData=D;var s=pay.elements.prov;
+  s.innerHTML='<option value="">Chọn</option>'+D.map(function(p,i){return '<option value="'+p[0]+'" data-i="'+i+'">'+p[0]+'</option>'}).join('');vnWard()}).catch(function(){vnData=null})}
+function vnWard(){var s=pay.elements.prov,o=s.options[s.selectedIndex],i=o&&o.getAttribute('data-i');
+  pay.elements.ward.innerHTML='<option value="">'+(i?'Chọn':'Chọn tỉnh trước')+'</option>'+(i?vnData[i][1].map(function(w){return '<option>'+w+'</option>'}).join(''):'')}
+pay.elements.prov.addEventListener('change',vnWard);
 function wcSend(order){
   (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=1').then(function(r){return r.json()})).then(function(D){wcData=D;
     var miss=[],items=order.items.map(function(r){var v=D.skus[wcSku(r)];if(!v){miss.push(r.name);return null}
       return Object.assign({},v,{quantity:r.qty,product:Object.assign({},D.products[v.product_id],{variation:v})})}).filter(Boolean);
     if(miss.length){pay.classList.remove('sending');return toast('Chưa tìm thấy sản phẩm trên Webcake: '+miss.join(', '))}
     var note=[order.note,order.email?'Email: '+order.email:'',order.signatureLink?'Link chữ ký: '+order.signatureLink:''].filter(Boolean).join(' | ');
-    parent.postMessage({type:'scar-checkout',cart:items,customer:{full_name:order.name,phone:order.phone,email:order.email,address:order.address,note:note}},wcBridge);
+    parent.postMessage({type:'scar-checkout',cart:items,customer:{full_name:order.name,phone:order.phone,email:order.email,address:order.address,province:order.province,ward:order.ward,note:note}},wcBridge);
     setTimeout(function(){pay.classList.remove('sending')},4000);
   }).catch(function(){pay.classList.remove('sending');toast('Lỗi mạng, vui lòng thử lại')})}
 addEventListener('message',function(e){var d=e.data;/* Webcake chạy mã nhúng trong một khung con của trang, nên lời báo có thể đến từ khung con đó */
@@ -1285,14 +1296,14 @@ pay.elements.proof.addEventListener('change',function(){var f=this.files[0];$('#
 pay.addEventListener('input',function(e){e.target.closest('label')&&e.target.closest('label').classList.remove('bad')});
 function submitOrder(){
   var el=pay.elements,bad=null;
-  ['name','email','phone','address'].forEach(function(k){var ok=el[k].value.trim()&&el[k].checkValidity();
+  ['name','email','phone','address','prov','ward'].forEach(function(k){var ok=el[k].value.trim()&&el[k].checkValidity();
     if(k==='phone')ok=/^[0-9 +.]{9,15}$/.test(el[k].value.trim());
     el[k].closest('label').classList.toggle('bad',!ok);if(!ok&&!bad)bad=el[k]});
   if(hasCustom()){var sg=el.sig.value.trim(),sok=/^https?:\/\/\S+\.\S+/.test(sg);el.sig.closest('label').classList.toggle('bad',!sok);
     if(!sok&&!bad){el.sig.focus();return toast('Vui lòng dán link Drive ảnh chữ ký (để công khai)')}}
   if(bad){bad.focus();return toast('Vui lòng điền đủ và đúng thông tin')}
   var order={at:new Date().toISOString(),name:el.name.value.trim(),email:el.email.value.trim(),phone:el.phone.value.trim(),
-    address:el.address.value.trim(),note:el.note.value.trim(),signatureLink:hasCustom()?el.sig.value.trim():'',items:cart.slice(),total:$('#cTotal').textContent};
+    address:el.address.value.trim(),province:el.prov.value,ward:el.ward.value,note:el.note.value.trim(),signatureLink:hasCustom()?el.sig.value.trim():'',items:cart.slice(),total:$('#cTotal').textContent};
   if(wcBridge){if(pay.classList.contains('sending'))return;pay.classList.add('sending');toast('Đang chuyển sang trang thanh toán…');
     wcSend(order);return}
   /* đang nằm trong trang Webcake mà chưa có cầu nối: gọi lại 1 lần, không có thì báo lỗi chứ không báo "đặt thành công" giả */
