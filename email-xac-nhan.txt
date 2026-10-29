@@ -1,0 +1,24 @@
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#030608;padding:0;margin:0">
+<tr><td align="center" style="padding:28px 12px">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#071312;border:1px solid #3a3222;border-radius:14px;font-family:Montserrat,Arial,Helvetica,sans-serif;color:#e6d1a2">
+<tr><td style="padding:26px 30px 6px"><img src="https://ducc513.github.io/scar-ecm/assets/share/email-ecm.png" width="110" alt="ECM" style="display:block;border:0;width:110px;height:auto"></td></tr>
+<tr><td align="center" style="padding:18px 30px 0"><img src="https://ducc513.github.io/scar-ecm/assets/share/email-scar.png" width="240" alt="SCAR Capsule" style="display:block;border:0;width:240px;height:auto"></td></tr>
+<tr><td align="center" style="padding:22px 30px 0;font-size:11px;letter-spacing:4px;color:#b9a77f">EPIC MOMENTS, EPIC LIFE</td></tr>
+<tr><td align="center" style="padding:10px 30px 0;font-size:24px;font-weight:800;letter-spacing:1px;color:#e6c98a">X&Aacute;C NHẬN ĐƠN H&Agrave;NG</td></tr>
+<tr><td align="center" style="padding:14px 30px 0"><span style="display:inline-block;border:1px solid #8a7445;border-radius:99px;padding:8px 22px;font-size:15px;font-weight:700;color:#f3e3bf">Mã đơn: #{{ORDER_ID}}</span></td></tr>
+<tr><td style="padding:26px 30px 0;font-size:15px;line-height:1.7;color:#e6d1a2">
+Chào <b style="color:#f3e3bf">{{CUSTOMER_NAME}}</b>,<br><br>
+Cảm ơn bạn đã đồng hành cùng ECM SCAR. Đơn hàng của bạn đã được ghi nhận và đang được xử lý.<br>
+Với đơn pre-order, SCAR sẽ liên hệ xác nhận và cập nhật thời gian giao hàng qua email hoặc số điện thoại bạn để lại.
+</td></tr>
+<tr><td style="padding:22px 30px 0">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #2c2a20;border-radius:10px;font-size:14px;color:#e6d1a2">
+<tr><td colspan="2" style="padding:12px 16px;border-bottom:1px solid #2c2a20;font-weight:800;letter-spacing:1px;color:#e6c98a">THÔNG TIN GIAO HÀNG</td></tr>
+<tr><td width="38%" style="padding:10px 16px;color:#a99a76;border-bottom:1px solid #1c201c">Khách hàng</td><td style="padding:10px 16px;border-bottom:1px solid #1c201c">{{CUSTOMER_NAME}}</td></tr>
+<tr><td style="padding:10px 16px;color:#a99a76;border-bottom:1px solid #1c201c">Số điện thoại</td><td style="padding:10px 16px;border-bottom:1px solid #1c201c">{{PHONE_NUMBER}}</td></tr>
+<tr><td style="padding:10px 16px;color:#a99a76">Địa chỉ</td><td style="padding:10px 16px">{{SHIPPING_ADDRESS}}</td></tr>
+</table></td></tr>
+<tr><td align="center" style="padding:28px 30px 0"><a href="https://www.scar-ecmcollection.site/" style="display:inline-block;background:#d4b06a;background-image:linear-gradient(180deg,#e6c98a,#c49a54);color:#14110a;text-decoration:none;font-weight:800;font-size:14px;letter-spacing:2px;padding:14px 34px;border-radius:99px">XEM BỘ SƯU TẬP</a></td></tr>
+<tr><td align="center" style="padding:28px 30px 8px;font-size:13px;line-height:1.7;color:#a99a76">Cần hỗ trợ? Gọi Hotline <b style="color:#e6c98a">092 191 09 99</b> hoặc trả lời email này.</td></tr>
+<tr><td align="center" style="padding:6px 30px 28px;font-size:12px;letter-spacing:2px;color:#7d6f52"><i>EVERY SCAR CARRIES WEIGHT</i><br>ECM &times; LION CHAMPIONSHIP &middot; SCAR CAPSULE</td></tr>
+</table></td></tr></table>
