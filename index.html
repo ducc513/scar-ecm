@@ -1145,22 +1145,16 @@ var PRODUCTS=[
   priceOf:function(sel){return {'BASIC|3.5M':349000,'BASIC|4.5M':399000,'CUSTOM (THÊU CHỮ KÝ)|3.5M':449000,'CUSTOM (THÊU CHỮ KÝ)|4.5M':499000}[sel.join('|')]||349000},
   scene:{title:'SCAR HANDWRAP',hint:'KÉO SANG 2 BÊN ĐỂ XOAY BĂNG',spin:'bangda',spinEnd:1,
    long:'Là lớp bảo vệ đầu tiên trước mọi cú đòn, băng quấn tay 100% Nylon mềm nhẹ, ôm sát từng khớp tay cho cảm giác nắm vô cùng tự nhiên. Nhờ khóa dán gai nhựa injection NL32 chắc chắn và chống xù xước, sản phẩm giữ cố định hoàn hảo suốt buổi tập khốc liệt.'}},
- /* 30/10: chỉ bán 1 combo full set, tặng kèm artbook: băng đa 3.5M giá 2.686k, 4.5M giá 2.699k; combo 2, 3 ẩn đi (hide) */
+ /* 30/10: chỉ bán 1 combo full set, tặng kèm artbook: băng đa 3.5M giá 2.686k, 4.5M giá 2.699k (combo 2, 3 đã bỏ) */
  {id:'combo1',kind:'combo',name:'COMBO SET 1',tag:'FULL SET ECM SCAR',price:2686000,cut:'pk_combo1_art',
   desc:'BỘ SƯU TẬP SCAR FULL SET BAO GỒM 01 BỘ RASHGUARD SCAR, 01 GĂNG MMA SPARRING, 01 CẶP BĂNG ĐA SCAR',
   gift:'TẶNG KÈM 01 QUYỂN ARTBOOK CÓ CHỮ KÝ VÕ SĨ',chart:1,
   opts:[{label:'RASHGUARD',values:SIZES_RG},{label:'GĂNG MMA SPARRING SCAR',values:GLOVE,names:GLOVE_NAMES},{label:'BĂNG ĐA SCAR',values:WRAP}],
-  priceOf:function(sel){return sel[2]==='4.5M'?2699000:2686000}},
- {id:'combo2',kind:'combo',hide:1,name:'COMBO SET 2',tag:'SET ECM SCAR',price:2499000,cut:'pk_combo2',
-  desc:'BỘ SƯU TẬP SCAR 02 VẬT PHẨM BAO GỒM 01 GĂNG MMA SPARRING, 01 CẶP BĂNG ĐA SCAR',
-  opts:[{label:'GĂNG MMA SPARRING SCAR',values:GLOVE},{label:'BĂNG ĐA SCAR',values:WRAP}]},
- {id:'combo3',kind:'combo',hide:1,name:'COMBO SET 3',tag:'SET ECM SCAR',price:2499000,cut:'pk_combo3',
-  desc:'BỘ SƯU TẬP SCAR 02 VẬT PHẨM BAO GỒM 01 GĂNG MMA SPARRING, 01 BỘ RASHGUARD SCAR',
-  opts:[{label:'RASHGUARD',values:SIZES_RG},{label:'GĂNG MMA SPARRING SCAR',values:GLOVE}]}
+  priceOf:function(sel){return sel[2]==='4.5M'?2699000:2686000}}
 ];
 /* bộ ảnh từng sản phẩm (note FIXX WEB 28/10): bỏ ảnh kéo quần (sp2_3) và ảnh lưng áo (sp1_4); combo dùng ảnh sản phẩm của trang BST */
 var PHOTOS={sp1:['sp1_1','sp1_2','sp1_3','sp1_5'],sp2:['sp2_1','sp2_2','sp2_4','sp2_5'],
-  combo1:['sp1_1','combo1_art','sp3_1','sp5_2','sp2_1'],combo2:['sp3_1','sp3_2','sp4_2','sp4_1','sp5_2'],combo3:['sp1_1','sp2_2','sp3_1','sp4_2','sp1_3']};
+  combo1:['sp1_1','combo1_art','sp3_1','sp5_2','sp2_1']};
 PRODUCTS.forEach(function(p){p.photos=(PHOTOS[p.id]||[1,2,3,4,5].map(function(i){return p.id+'_'+i})).map(function(n){return A+'sp/'+n+'.webp?v=3'})});
 /* Thứ tự đúng design: bấm mũi tên phải từ Lượng sang Kamil, rồi Y.
    cap/capNick: chữ dưới slider; name/nick: chữ trong khung chi tiết; row: thứ tự ảnh nhỏ trong khung chi tiết */
@@ -1288,6 +1282,8 @@ function navOn(v){$$('.hdr nav a').forEach(function(a){a.classList.toggle('on',a
 
 /* ======================= Giỏ hàng ======================= */
 var cart=[]; try{cart=JSON.parse(localStorage.getItem('scar_cart')||'[]')}catch(e){}
+/* giỏ cũ lưu trong máy khách: bỏ sản phẩm không còn bán (combo 2, 3) và tính lại giá theo bảng giá hiện tại */
+cart=cart.filter(function(r){var p=PRODUCTS.filter(function(x){return x.id===r.id})[0];if(!p)return false;r.price=priceOf(p,r.opts||[]);return true});
 function saveCart(){try{localStorage.setItem('scar_cart',JSON.stringify(cart))}catch(e){};renderCart();if(pay)pay.classList.toggle('sig',hasCustom())}
 function addToCart(p,choice){
   var key=p.id+'|'+choice.join('|'), row=cart.filter(function(r){return r.key===key})[0];
@@ -1327,7 +1323,7 @@ var wcBridge=null,wcData=null;
 function wcSku(r){var o=r.opts,g=function(x){return x.replace(' - ','-')},w=function(x){return x.replace('.','')};
   switch(r.id){case 'sp1':return 'ECMARGS-'+o[0];case 'sp2':return 'ECMQRGS-'+o[0];case 'sp3':return 'ECMMMACSF-'+o[0];case 'sp4':return 'ECMMMAISF-'+o[0];
     case 'sp5':return 'ECMHWSC'+(/^CUSTOM/.test(o[0])?'C':'')+o[1].replace(/[.M]/g,'');
-    case 'combo1':return 'ECMCB1-'+o[0]+'-'+g(o[1])+'-'+w(o[2]);case 'combo2':return 'ECMCB2-'+g(o[0])+'-'+w(o[1]);case 'combo3':return 'ECMCB3-'+o[0]+'-'+g(o[1])}}
+    case 'combo1':return 'ECMCB1-'+o[0]+'-'+g(o[1])+'-'+w(o[2])}}
 /* dựng giỏ hàng đúng dạng Webcake lưu (cart_items: mẫu mã + quantity + product) rồi gửi sang trang Webcake */
 /* Tỉnh/Phường theo danh mục sau sáp nhập (34 tỉnh), để Webcake tạo đơn luôn mà không phải điền lại */
 var vnData=null;function vnLoad(){if(vnData)return;vnData=1;fetch(A+'vn34.json?v=1').then(function(r){return r.json()}).then(function(D){vnData=D;var s=pay.elements.prov;
@@ -1338,7 +1334,7 @@ pay.elements.prov.addEventListener('change',vnWard);
 function thumb(u){return new Promise(function(ok,no){var i=new Image();i.onload=function(){var k=240/Math.max(i.naturalWidth,i.naturalHeight),c=document.createElement('canvas');
   c.width=Math.round(i.naturalWidth*k);c.height=Math.round(i.naturalHeight*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);try{ok(c.toDataURL('image/jpeg',.82))}catch(e){no(e)}};i.onerror=no;i.src=u})}
 function wcSend(order){
-  (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=4').then(function(r){return r.json()})).then(function(D){wcData=D;
+  (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=5').then(function(r){return r.json()})).then(function(D){wcData=D;
     var miss=[],items=order.items.map(function(r){var v=D.skus[wcSku(r)];if(!v){miss.push(r.name);return null}
       return Object.assign({},v,{quantity:r.qty,product:Object.assign({},D.products[v.product_id],{variation:v})})}).filter(Boolean);
     if(miss.length){pay.classList.remove('sending');return toast('Chưa tìm thấy sản phẩm trên Webcake: '+miss.join(', '))}
@@ -1736,7 +1732,7 @@ tsk.addEventListener('keydown',function(e){if(!tv.duration)return;if(e.key==='Ar
 
 /* ======================= Pre-order ======================= */
 var tab='single',pi=0,sel=[];
-function list(){return PRODUCTS.filter(function(p){return p.kind===tab&&!p.hide})}
+function list(){return PRODUCTS.filter(function(p){return p.kind===tab})}
 /* tải sẵn ảnh sản phẩm của Pre-order để bấm lên/xuống đổi ảnh ngay */
 var poTok=0,cutCache={};
 function cutPre(p){if(!cutCache[p.cut]){var im=new Image();im.decoding='async';im.src=A+'ui/'+p.cut+'.webp';cutCache[p.cut]=im}return cutCache[p.cut]}
