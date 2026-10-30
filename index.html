@@ -338,6 +338,28 @@ html:has(#scar){overflow-x:hidden}
 #scar .opts button{min-width:44px;height:38px;padding:0 12px;border:1px solid #b99a5f;color:var(--gold);font-weight:700;font-size:13px;border-radius:3px;transition:background .2s,color .2s}
 #scar .opts button.on,#scar .opts button:hover{background:var(--gold);color:#111}
 #scar .opt-label{font-size:11px;font-weight:700;font-style:italic;color:var(--gold);margin:14px 0 8px;letter-spacing:.04em}
+/* quà tặng artbook của combo: dải vàng sáng để khách thấy ngay */
+#scar .gift{display:inline-flex;align-items:center;gap:.55em;margin:0 0 6px;padding:.55em 1.1em .5em .8em;font-weight:800;font-style:italic;font-size:14px;letter-spacing:.03em;line-height:1.2;color:#15100a;
+  background:linear-gradient(100deg,#b88f4d,#f3dca8 45%,#d6b37e 60%,#b88f4d);background-size:220% 100%;border-radius:3px;box-shadow:0 0 18px rgba(241,215,158,.45);animation:giftShine 3.2s ease-in-out infinite}
+#scar .gift[hidden]{display:none}
+#scar .gift::before{content:'';flex:none;width:1.25em;height:1.25em;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M3 9h18v4H3zM5 13v8h14v-8M12 9v12M12 9c-2-4-6-4-6-1.5S10 9 12 9zm0 0c2-4 6-4 6-1.5S14 9 12 9z'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M3 9h18v4H3zM5 13v8h14v-8M12 9v12M12 9c-2-4-6-4-6-1.5S10 9 12 9zm0 0c2-4 6-4 6-1.5S14 9 12 9z'/%3E%3C/svg%3E") center/contain no-repeat}
+@keyframes giftShine{0%,100%{background-position:100% 0;box-shadow:0 0 14px rgba(241,215,158,.35)}50%{background-position:0 0;box-shadow:0 0 26px rgba(241,215,158,.7)}}
+@media (prefers-reduced-motion:reduce){#scar .gift{animation:none}}
+/* bảng size rashguard (design SIZE.png) */
+#scar table.szt{border-collapse:collapse;table-layout:auto;margin-top:14px;width:100%;max-width:420px;color:var(--gold);font-size:11.5px;font-weight:600;text-align:center}
+#scar table.szt th,#scar table.szt td{position:static;width:auto;height:auto;border:1px solid #b99a5f;padding:4px 6px;line-height:1.2;text-align:center;color:var(--gold);background:none;letter-spacing:.02em;vertical-align:middle}
+#scar table.szt th{font-weight:700;font-size:10.5px;letter-spacing:.04em}
+#scar table.szt td{border-top-color:rgba(185,154,95,.35);border-bottom-color:rgba(185,154,95,.35)}
+#scar table.szt tr:last-child td{border-bottom-color:#b99a5f}
+#scar table.szt th:nth-child(2),#scar table.szt td:nth-child(2){display:table-cell}
+#scar .opts:has(button[data-v*=" - "]){display:grid;grid-template-columns:repeat(2,minmax(0,max-content));gap:8px}
+#scar .opts:has(button[data-v*=" - "]) button{padding:0 8px;font-size:11.5px;white-space:nowrap}
+#scar .sztog{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:0;font-size:12px;letter-spacing:.04em;color:rgba(214,179,126,.7);transition:color .2s}
+#scar .sztog:hover,#scar .sztog.on{color:var(--gold)}
+#scar .sztog svg{width:11px;height:11px;transition:transform .25s}#scar .sztog.on svg{transform:rotate(180deg)}
+#scar .szbox{display:none}#scar .sztog.on+.szbox{display:block}
 
 /* ================= PRE-ORDER ================= */
 #scar .po{padding-top:96px;background:radial-gradient(ellipse at 70% 10%,#2a2412 0,#0b0a06 45%,#05080a 75%)}
@@ -633,6 +655,23 @@ html:has(#scar){overflow-x:hidden}
   #scar .po-right.combo .opts:has(button[data-v*=" - "]){gap:calc(9.5*var(--u))}
   #scar .po-right.combo .opts button{min-width:calc(39*var(--u));height:calc(34*var(--u));padding:0 calc(13*var(--u));font-size:calc(16*var(--u));border-width:calc(1.3*var(--u))}
   #scar .po-right .buy{position:absolute;top:calc(720*var(--u));margin:0}
+  #scar .po-right .gift{margin:calc(16*var(--u)) 0 0;font-size:calc(17*var(--u))}
+  #scar .po-right.combo .desc{margin-top:calc(24*var(--u))}
+  #scar .po-right.combo .opt-label:first-child{margin-top:calc(22*var(--u))}
+  #scar .po-right.combo .opt-label{margin:calc(14*var(--u)) 0 calc(8*var(--u))}
+  #scar .po-right.combo .opts:has(button[data-v*=" - "]){display:grid;grid-template-columns:repeat(2,max-content);gap:calc(9*var(--u)) calc(12*var(--u))}
+  #scar .po-right.combo .opts:has(button[data-v*=" - "]) button{height:calc(30*var(--u));font-size:calc(15*var(--u))}
+  #scar .po-right:not(.combo) .opts:has(button[data-v="L"]):not(:has(button[data-v="XL"])) button{font-size:calc(21*var(--u));padding:0 calc(22*var(--u))}
+  #scar .po-right table.szt{margin-top:calc(22*var(--u));width:calc(510*var(--u));max-width:none;font-size:calc(13*var(--u))}
+  #scar .po-right table.szt th{font-size:calc(12*var(--u));height:auto;padding:calc(5*var(--u)) calc(8*var(--u))}
+  #scar .po-right table.szt td{height:auto;padding:calc(3*var(--u)) calc(8*var(--u))}
+  #scar .po-right table.szt th,#scar .po-right table.szt td{border-width:calc(1.3*var(--u))}
+  #scar .po-right table.szt th:nth-child(1){width:23%}#scar .po-right table.szt th:nth-child(2){width:40%}
+  #scar .po-right .sztog{margin-top:calc(20*var(--u));font-size:calc(15*var(--u))}#scar .po-right .sztog svg{width:calc(13*var(--u));height:calc(13*var(--u))}
+  #scar .po-right .szbox table.szt{margin-top:calc(12*var(--u))}
+  /* mở bảng size trong combo thì nút giá + ADD và cả khung được đẩy xuống */
+  #scar .po-top:has(.po-right.combo){height:calc(845*var(--u))}#scar .po-right.combo .buy{top:calc(756*var(--u))}
+  #scar .po-top.szopen:has(.po-right.combo){height:calc(1010*var(--u))}#scar .po-top.szopen .po-right.combo .buy{top:calc(921*var(--u))}
   #scar .po-right .buy span{width:calc(241*var(--u));height:calc(36*var(--u));padding:0 calc(10*var(--u));display:flex;align-items:center;border:calc(2*var(--u)) solid #cdaa6b;font-size:calc(22*var(--u));line-height:1}
   #scar .po-right .buy button{width:calc(149*var(--u));height:calc(36*var(--u));margin-left:calc(6*var(--u));padding:0;background:#cdaa6b;font-size:calc(22*var(--u));line-height:1}
   #scar .totalbar{width:calc(1521*var(--u));margin:0 0 0 calc(200*var(--u));height:calc(90*var(--u));padding:0;flex-wrap:nowrap}
@@ -953,6 +992,7 @@ html:has(#scar){overflow-x:hidden}
         <h1 id="pName"></h1>
         <p class="tag" id="pTag"></p>
         <p class="desc" id="pDesc"></p>
+        <p class="gift" id="pGift" hidden></p>
         <div id="pOpts"></div>
         <div class="buy"><span id="pPrice"></span><button id="pAdd">ADD</button></div>
       </div>
@@ -1071,26 +1111,30 @@ html:has(#scar){overflow-x:hidden}
 (function(){
 /* ======================= DỮ LIỆU: sửa giá, mô tả, link ở đây ======================= */
 var A='assets/';
-var SIZES_RG=['S','M','L','XL','XXL'], SIZES_GL=['M','L'], GLOVE=['M - IMPACT','M - CONTROL','L - IMPACT','L - CONTROL'], WRAP=['3.5M','4.5M'];
+var SIZES_RG=['S','M','L','XL','XXL'], SIZES_GL=['M','L'], GLOVE=['M - CONTROL','L - CONTROL','M - IMPACT','L - IMPACT'], WRAP=['3.5M','4.5M'];
+/* chữ hiện trên nút (design SIZE GĂNG / SIZE GĂNG TRONG COMBO); giá trị gốc vẫn giữ để ghép mã SKU Webcake */
+var GL_NAMES=['Size M | &lt;65KG','Size L | &gt;65KG'],GLOVE_NAMES=['CONTROL: Size M | &lt;65KG','CONTROL: Size L | &gt;65KG','IMPACT: Size M | &lt;65KG','IMPACT: Size L | &gt;65KG'];
+/* bảng size áo/quần rashguard (design SIZE.png) */
+var RG_CHART=[['S','145-155cm','50-60KG'],['M','155-165cm','60-65KG'],['L','165-175cm','65-70KG'],['XL','175-180cm','70-80KG'],['XXL','&gt;180cm','&gt;80KG']];
 var PRODUCTS=[
  {id:'sp1',kind:'single',name:'SCAR RASHGUARD SHIRT',tag:'EPIC COMBAT MOMENTS',price:459000,cut:'pk_sp1',
   desc:'Khi đang tập, thứ duy nhất nên nằm trong đầu bạn là đối thủ, không phải chiếc áo xô lệch hay nặng mồ hôi. ECM SCAR Rashguard được làm để bạn quên rằng mình đang mặc nó.',
-  opts:[{label:'',values:SIZES_RG}],
+  opts:[{label:'',values:SIZES_RG,chart:1}],
   scene:{title:'RASHGUARD SHIRT',hint:'KÉO CÁC GÓC ĐỂ CẢM NHẬN ĐỘ CO GIÃN SẢN PHẨM',img:'ui/scene_shirt.webp?v=3',hands:[[700,195],[1290,150],[640,780],[1340,700]],
    long:'ECM SCAR Rashguard ôm sát như lớp da thứ hai nhờ vải co giãn nhẹ nhàng <b>(82% Polyester, 18% Spandex, 180 gsm)</b>, không xô lệch khi vận động. Cấu trúc 6 mảnh với 2 mảng lưới bên sườn thoát mồ hôi nhanh, giữ áo luôn nhẹ qua nhiều hiệp tập. Chất vải cao cấp hạn chế xù và bám mùi vượt trội, giúp bạn tập trung hoàn toàn vào đối thủ.'}},
  {id:'sp2',kind:'single',name:'SCAR RASHGUARD SHORT',tag:'EPIC COMBAT MOMENTS',price:439000,cut:'pk_sp2',
   desc:'Khi đang tập, thứ duy nhất nên nằm trong đầu bạn là đối thủ, không phải chiếc quần xô lệch hay nặng mồ hôi. ECM SCAR Shorts được làm để bạn quên rằng mình đang mặc nó.',
-  opts:[{label:'',values:SIZES_RG}],
+  opts:[{label:'',values:SIZES_RG,chart:1}],
   scene:{title:'RASHGUARD SHORT',hint:'KÉO CÁC GÓC ĐỂ CẢM NHẬN ĐỘ CO GIÃN SẢN PHẨM',img:'ui/scene_short.webp?v=3',hands:[[665,175],[1255,235],[1480,655]],
    long:'ECM SCAR Shorts giúp bạn tung cú đá hết biên độ nhờ thiết kế đũng quần thoải mái, hoàn toàn không gây bó hay cản trở khi nâng chân. Chất vải co giãn nhẹ nhàng (82% Polyester, 18% Spandex, 180 gsm) ôm vừa vặn, đảm bảo sự tự do tối đa trong từng đòn đánh. Bên cạnh đó, chất liệu chuyên dụng từ ECM còn hạn chế xù và bám mùi vượt trội, giữ quần luôn bền bỉ qua thời gian dài tập luyện.'}},
  {id:'sp3',kind:'single',name:'SCAR CONTROL MMA SPARRING',tag:'OPEN HAND FULL CONTROL',price:1499000,cut:'pk_sp3',
   desc:'Không phải trận nào cũng kết thúc khi đứng. Khi cuộc đấu xuống sàn, thứ quyết định là độ bám, cảm giác tay và từng chuyển đổi. SCAR Control được làm cho những khoảnh khắc đó, tối ưu cho grappling, đánh nằm và khóa siết.',
-  opts:[{label:'',values:SIZES_GL}],
+  opts:[{label:'',values:SIZES_GL,names:GL_NAMES}],
   scene:{title:'SCAR CONTROL',hint:'KÉO SANG 2 BÊN ĐỂ XOAY GĂNG',spin:'control',
    long:'Với thiết kế ôm sát cùng khả năng mở nắm tự nhiên, găng giúp bạn dễ dàng bám người, kiểm soát cổ tay và vào khóa mượt mà mà không lo cản trở. Lớp mút mỏng tinh chỉnh vừa đủ lực bảo vệ nhưng vẫn giữ trọn cảm giác tay chân thật nhất khi grappling. Kết hợp cùng khóa dán 2 vòng chắc chắn, khớp cổ tay luôn được cố định tuyệt đối, không lo xê dịch qua từng pha chuyển đổi.'}},
  {id:'sp4',kind:'single',name:'SCAR IMPACT MMA SPARRING',tag:'PART OF YOUR HAND. NOT ON IT',price:1499000,cut:'pk_sp4',
   desc:'Sparring là nơi vết sẹo bắt đầu. Hàng trăm hiệp tập, hàng nghìn cú đòn, trước khi có một trận đấu thật. SCAR Impact được làm cho những giờ đó, tối ưu cho đánh đứng.',
-  opts:[{label:'',values:SIZES_GL}],
+  opts:[{label:'',values:SIZES_GL,names:GL_NAMES}],
   scene:{title:'SCAR IMPACT',hint:'KÉO SANG 2 BÊN ĐỂ XOAY GĂNG',spin:'impact',
    long:'Được chế tác từ da bò thật cao cấp, đôi găng sở hữu thiết kế liền khối ôm sát, loại bỏ hoàn toàn khoảng hở xê dịch để cú đòn đạt độ chính xác tối đa. Lớp mút dày hấp thụ lực vượt trội giúp bảo vệ an toàn cho cả bạn lẫn đối thủ trong suốt quá trình va chạm. Bên cạnh đó, khóa dán cổ tay chắc chắn giúp cố định khớp xương, sẵn sàng cùng bạn chinh phục mọi cường độ tập luyện mỗi ngày.'}},
  {id:'sp5',kind:'single',name:'SCAR HANDWRAP',tag:'THE FIRST LAYER',price:349000,cut:'pk_sp5',
@@ -1100,13 +1144,15 @@ var PRODUCTS=[
   priceOf:function(sel){return {'BASIC|3.5M':349000,'BASIC|4.5M':399000,'CUSTOM (THÊU CHỮ KÝ)|3.5M':449000,'CUSTOM (THÊU CHỮ KÝ)|4.5M':499000}[sel.join('|')]||349000},
   scene:{title:'SCAR HANDWRAP',hint:'KÉO SANG 2 BÊN ĐỂ XOAY BĂNG',spin:'bangda',spinEnd:1,
    long:'Là lớp bảo vệ đầu tiên trước mọi cú đòn, băng quấn tay 100% Nylon mềm nhẹ, ôm sát từng khớp tay cho cảm giác nắm vô cùng tự nhiên. Nhờ khóa dán gai nhựa injection NL32 chắc chắn và chống xù xước, sản phẩm giữ cố định hoàn hảo suốt buổi tập khốc liệt.'}},
- {id:'combo1',kind:'combo',name:'COMBO SET 1',tag:'FULL SET ECM SCAR',price:2499000,cut:'pk_combo1',
-  desc:'BỘ SƯU TẬP SCAR FULL SET BAO GỒM 01 BỘ RASHGUARD SCAR, 01 GĂNG MMA SPARRING, 01 CẶP BĂNG ĐA SCAR',
-  opts:[{label:'RASHGUARD',values:SIZES_RG},{label:'GĂNG MMA SPARRING SCAR',values:GLOVE},{label:'BĂNG ĐA SCAR',values:WRAP}]},
- {id:'combo2',kind:'combo',name:'COMBO SET 2',tag:'SET ECM SCAR',price:2499000,cut:'pk_combo2',
+ /* 30/10: chỉ bán 1 combo full set (băng đa 3.5M) giá 2.699k, tặng kèm artbook; combo 2, 3 ẩn đi (hide) */
+ {id:'combo1',kind:'combo',name:'COMBO SET 1',tag:'FULL SET ECM SCAR',price:2699000,cut:'pk_combo1_art',
+  desc:'BỘ SƯU TẬP SCAR FULL SET BAO GỒM 01 BỘ RASHGUARD SCAR, 01 GĂNG MMA SPARRING, 01 CẶP BĂNG ĐA SCAR 3.5M',
+  gift:'TẶNG KÈM 01 QUYỂN ARTBOOK CÓ CHỮ KÝ VÕ SĨ',chart:1,
+  opts:[{label:'RASHGUARD',values:SIZES_RG},{label:'GĂNG MMA SPARRING SCAR',values:GLOVE,names:GLOVE_NAMES},{label:'BĂNG ĐA SCAR',values:['3.5M']}]},
+ {id:'combo2',kind:'combo',hide:1,name:'COMBO SET 2',tag:'SET ECM SCAR',price:2499000,cut:'pk_combo2',
   desc:'BỘ SƯU TẬP SCAR 02 VẬT PHẨM BAO GỒM 01 GĂNG MMA SPARRING, 01 CẶP BĂNG ĐA SCAR',
   opts:[{label:'GĂNG MMA SPARRING SCAR',values:GLOVE},{label:'BĂNG ĐA SCAR',values:WRAP}]},
- {id:'combo3',kind:'combo',name:'COMBO SET 3',tag:'SET ECM SCAR',price:2499000,cut:'pk_combo3',
+ {id:'combo3',kind:'combo',hide:1,name:'COMBO SET 3',tag:'SET ECM SCAR',price:2499000,cut:'pk_combo3',
   desc:'BỘ SƯU TẬP SCAR 02 VẬT PHẨM BAO GỒM 01 GĂNG MMA SPARRING, 01 BỘ RASHGUARD SCAR',
   opts:[{label:'RASHGUARD',values:SIZES_RG},{label:'GĂNG MMA SPARRING SCAR',values:GLOVE}]}
 ];
@@ -1337,8 +1383,14 @@ function submitOrder(){
 
 /* Hộp chọn size nhanh (dùng khi bấm ADD ở trang Bộ sưu tập) */
 function priceOf(p,sel){return p.priceOf?p.priceOf(sel):p.price}
+function chartHTML(){return '<table class="szt"><tr><th>SIZE</th><th>CHIỀU CAO</th><th>CÂN NẶNG</th></tr>'+RG_CHART.map(function(r){return '<tr><td>'+r.join('</td><td>')+'</td></tr>'}).join('')+'</table>'}
 function optsHTML(p,sel){return p.opts.map(function(g,gi){return (g.label?'<p class="opt-label">'+g.label+'</p>':'')+
-  '<div class="opts" data-g="'+gi+'">'+g.values.map(function(v){return '<button data-v="'+v+'" class="'+(sel[gi]===v?'on':'')+'">'+v+'</button>'}).join('')+'</div>'}).join('')}
+  '<div class="opts" data-g="'+gi+'">'+g.values.map(function(v,i){return '<button data-v="'+v+'" class="'+(sel[gi]===v?'on':'')+'">'+(g.names?g.names[i]:v)+'</button>'}).join('')+'</div>'+
+  (g.chart?chartHTML():'')}).join('')+
+  /* combo có áo: bấm "HIỆN BẢNG SIZE ÁO" thì bảng size mở ra bên dưới */
+  (p.chart?'<button type="button" class="sztog">HIỆN BẢNG SIZE ÁO <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2 2l4 4 4-4M2 6l4 4 4-4"/></svg></button><div class="szbox">'+chartHTML()+'</div>':'')}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('.sztog');if(!t)return;var on=t.classList.toggle('on');
+  t.firstChild.nodeValue=(on?'ẨN':'HIỆN')+' BẢNG SIZE ÁO ';var r=t.closest('.po-top');r&&r.classList.toggle('szopen',on)});
 function bindOpts(box,sel,ch){box.onclick=function(e){var b=e.target.closest('[data-v]');if(!b)return;var gi=+b.parentNode.dataset.g;sel[gi]=b.dataset.v;
   $$('button',b.parentNode).forEach(function(x){x.classList.toggle('on',x===b)});ch&&ch()}}
 var spSel=[],spP=null;
@@ -1682,7 +1734,7 @@ tsk.addEventListener('keydown',function(e){if(!tv.duration)return;if(e.key==='Ar
 
 /* ======================= Pre-order ======================= */
 var tab='single',pi=0,sel=[];
-function list(){return PRODUCTS.filter(function(p){return p.kind===tab})}
+function list(){return PRODUCTS.filter(function(p){return p.kind===tab&&!p.hide})}
 /* tải sẵn ảnh sản phẩm của Pre-order để bấm lên/xuống đổi ảnh ngay */
 var poTok=0,cutCache={};
 function cutPre(p){if(!cutCache[p.cut]){var im=new Image();im.decoding='async';im.src=A+'ui/'+p.cut+'.webp';cutCache[p.cut]=im}return cutCache[p.cut]}
@@ -1693,7 +1745,7 @@ function renderPO(anim){
   /* ảnh đã tải sẵn: mờ đi rất nhanh rồi hiện ảnh mới ngay, không chờ tải */
   if(anim){img.classList.add('out');var t0=performance.now();(pre.decode?pre.decode():Promise.resolve()).catch(function(){}).then(function(){setTimeout(set,Math.max(0,130-(performance.now()-t0)))})}else set();
   $('.po-right').classList.toggle('combo',p.kind==='combo');
-  $('#pName').textContent=p.name;$('#pTag').textContent=p.tag;$('#pDesc').textContent=p.desc;
+  $('#pName').textContent=p.name;$('#pTag').textContent=p.tag;$('#pDesc').textContent=p.desc;$('#pGift').textContent=p.gift||'';$('#pGift').hidden=!p.gift;poTop.classList.remove('szopen');
   var pr=function(){$('#pPrice').textContent=fmt(priceOf(p,sel))+' VND'};pr();
   var box=$('#pOpts');box.innerHTML=optsHTML(p,sel);bindOpts(box,sel,pr);
   $$('.tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.tab===tab)});
