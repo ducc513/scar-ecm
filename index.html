@@ -1158,7 +1158,7 @@ var PRODUCTS=[
 ];
 /* bộ ảnh từng sản phẩm (note FIXX WEB 28/10): bỏ ảnh kéo quần (sp2_3) và ảnh lưng áo (sp1_4); combo dùng ảnh sản phẩm của trang BST */
 var PHOTOS={sp1:['sp1_1','sp1_2','sp1_3','sp1_5'],sp2:['sp2_1','sp2_2','sp2_4','sp2_5'],
-  combo1:['sp1_1','sp2_1','sp3_1','sp5_2','sp4_2'],combo2:['sp3_1','sp3_2','sp4_2','sp4_1','sp5_2'],combo3:['sp1_1','sp2_2','sp3_1','sp4_2','sp1_3']};
+  combo1:['sp1_1','combo1_art','sp3_1','sp5_2','sp2_1'],combo2:['sp3_1','sp3_2','sp4_2','sp4_1','sp5_2'],combo3:['sp1_1','sp2_2','sp3_1','sp4_2','sp1_3']};
 PRODUCTS.forEach(function(p){p.photos=(PHOTOS[p.id]||[1,2,3,4,5].map(function(i){return p.id+'_'+i})).map(function(n){return A+'sp/'+n+'.webp?v=3'})});
 /* Thứ tự đúng design: bấm mũi tên phải từ Lượng sang Kamil, rồi Y.
    cap/capNick: chữ dưới slider; name/nick: chữ trong khung chi tiết; row: thứ tự ảnh nhỏ trong khung chi tiết */
@@ -1336,7 +1336,7 @@ pay.elements.prov.addEventListener('change',vnWard);
 function thumb(u){return new Promise(function(ok,no){var i=new Image();i.onload=function(){var k=240/Math.max(i.naturalWidth,i.naturalHeight),c=document.createElement('canvas');
   c.width=Math.round(i.naturalWidth*k);c.height=Math.round(i.naturalHeight*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);try{ok(c.toDataURL('image/jpeg',.82))}catch(e){no(e)}};i.onerror=no;i.src=u})}
 function wcSend(order){
-  (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=2').then(function(r){return r.json()})).then(function(D){wcData=D;
+  (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=3').then(function(r){return r.json()})).then(function(D){wcData=D;
     var miss=[],items=order.items.map(function(r){var v=D.skus[wcSku(r)];if(!v){miss.push(r.name);return null}
       return Object.assign({},v,{quantity:r.qty,product:Object.assign({},D.products[v.product_id],{variation:v})})}).filter(Boolean);
     if(miss.length){pay.classList.remove('sending');return toast('Chưa tìm thấy sản phẩm trên Webcake: '+miss.join(', '))}
