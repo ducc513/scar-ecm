@@ -1336,7 +1336,7 @@ pay.elements.prov.addEventListener('change',vnWard);
 function thumb(u){return new Promise(function(ok,no){var i=new Image();i.onload=function(){var k=240/Math.max(i.naturalWidth,i.naturalHeight),c=document.createElement('canvas');
   c.width=Math.round(i.naturalWidth*k);c.height=Math.round(i.naturalHeight*k);c.getContext('2d').drawImage(i,0,0,c.width,c.height);try{ok(c.toDataURL('image/jpeg',.82))}catch(e){no(e)}};i.onerror=no;i.src=u})}
 function wcSend(order){
-  (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=1').then(function(r){return r.json()})).then(function(D){wcData=D;
+  (wcData?Promise.resolve(wcData):fetch(A+'wc-cart.json?v=2').then(function(r){return r.json()})).then(function(D){wcData=D;
     var miss=[],items=order.items.map(function(r){var v=D.skus[wcSku(r)];if(!v){miss.push(r.name);return null}
       return Object.assign({},v,{quantity:r.qty,product:Object.assign({},D.products[v.product_id],{variation:v})})}).filter(Boolean);
     if(miss.length){pay.classList.remove('sending');return toast('Chưa tìm thấy sản phẩm trên Webcake: '+miss.join(', '))}
