@@ -356,6 +356,7 @@ html:has(#scar){overflow-x:hidden}
 #scar table.szt th:nth-child(2),#scar table.szt td:nth-child(2){display:table-cell}
 #scar .opts:has(button[data-v*=" - "]){display:grid;grid-template-columns:repeat(2,minmax(0,max-content));gap:8px}
 #scar .opts:has(button[data-v*=" - "]) button{padding:0 8px;font-size:11.5px;white-space:nowrap}
+@media (max-width:400px){#scar .opts:has(button[data-v*=" - "]){grid-template-columns:1fr 1fr}#scar .opts:has(button[data-v*=" - "]) button{white-space:normal;height:auto;min-height:38px;padding:5px 6px;font-size:11px;line-height:1.25}}
 #scar .sztog{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:0;font-size:12px;letter-spacing:.04em;color:rgba(214,179,126,.7);transition:color .2s}
 #scar .sztog:hover,#scar .sztog.on{color:var(--gold)}
 #scar .sztog svg{width:11px;height:11px;transition:transform .25s}#scar .sztog.on svg{transform:rotate(180deg)}
